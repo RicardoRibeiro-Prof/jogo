@@ -1,698 +1,983 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>CETI – Jogos de Lógica</title>
-<style>
-  :root{
-    --bg:#050505;
-    --panel:#0e0e0e;
-    --accent:#00a651;      /* verde CETI */
-    --accent-2:#fdd835;    /* amarelo CETI */
-    --border-soft:rgba(255,255,255,0.06);
-    --text-main:#f5f5f5;
-    --text-muted:#cfcfcf;
-  }
-  *{ box-sizing:border-box; }
-  body{
-    margin:0;
-    font-family:Inter, Segoe UI, Arial, sans-serif;
-    background:radial-gradient(circle at top,#111 0,#050505 55%,#000 100%);
-    color:var(--text-main);
-    min-height:100vh;
-  }
+  <meta charset="UTF-8" />
+  <title>Jogos de Lógica – Turma B | CETI Maria de Castro Ribeiro</title>
+  <style>
+    :root {
+      --verde: #00e676;
+      --verde-escuro: #004d26;
+      --amarelo: #fdd835;
+      --amarelo-escuro: #fbc02d;
+      --preto: #000000;
+      --cinza-card: #111111;
+    }
 
-  .page{
-    max-width:1200px;
-    margin:0 auto;
-    padding:24px 16px 40px;
-  }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-  /* CABEÇALHO IGUAL AO SITE DOS ESTANDES */
-  header{
-    border-radius:18px;
-    padding:18px 18px 16px;
-    background:linear-gradient(135deg,rgba(0,166,81,0.14),rgba(253,216,53,0.10));
-    border:1px solid rgba(253,216,53,0.55);
-    box-shadow:0 14px 40px rgba(0,0,0,0.7);
-    margin-bottom:22px;
-    position:relative;
-    overflow:hidden;
-  }
-  header::before{
-    content:"";
-    position:absolute;
-    inset:-40%;
-    background:
-      radial-gradient(circle at 15% 0,rgba(0,166,81,0.45),transparent 55%),
-      radial-gradient(circle at 90% 20%,rgba(253,216,53,0.45),transparent 55%);
-    opacity:0.7;
-    pointer-events:none;
-  }
-  .header-content{
-    position:relative;
-    z-index:2;
-  }
-  header h1{
-    margin:0;
-    color:var(--accent-2);
-    font-size:22px;
-    text-transform:uppercase;
-    letter-spacing:0.6px;
-    font-weight:800;
-  }
-  header h2{
-    margin:6px 0 2px 0;
-    color:var(--text-main);
-    font-size:18px;
-    font-weight:600;
-  }
-  header h3{
-    margin:0 0 6px 0;
-    color:var(--accent);
-    font-size:15px;
-    font-weight:600;
-  }
-  header p{
-    margin:0;
-    font-size:13px;
-    color:var(--text-muted);
-  }
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background: radial-gradient(circle at top, #222 0, #000 55%, #000 100%);
+      color: #f5f5f5;
+      min-height: 100vh;
+    }
 
-  /* GRID DOS JOGOS (2 CARDS LADO A LADO) */
-  .grid{
-    display:grid;
-    grid-template-columns:1.1fr 0.9fr;
-    gap:18px;
-  }
-  @media(max-width:960px){
-    .grid{ grid-template-columns:1fr; }
-  }
+    /* CABEÇALHO COM IMAGEM DE FUNDO */
+    header {
+      background: linear-gradient(90deg, #000 0%, #004d26 40%, #000 100%);
+      padding: 16px 24px;
+      border-bottom: 2px solid var(--amarelo-escuro);
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      position: relative;
+      overflow: hidden;
+    }
 
-  /* CARDS */
-  .game-card{
-    background:linear-gradient(180deg,#060606,#101010);
-    border-radius:16px;
-    padding:16px 16px 14px;
-    border:1px solid var(--border-soft);
-    box-shadow:0 10px 30px rgba(0,0,0,0.75);
-    position:relative;
-    overflow:hidden;
-  }
-  .game-card::before{
-    content:"";
-    position:absolute;
-    inset:-30%;
-    background:
-      radial-gradient(circle at top left,rgba(0,166,81,0.13),transparent 55%),
-      radial-gradient(circle at bottom right,rgba(253,216,53,0.10),transparent 55%);
-    opacity:0.9;
-    pointer-events:none;
-  }
-  .game-inner{
-    position:relative;
-    z-index:2;
-  }
+    header::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image: url("https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=1600&q=80");
+      background-size: cover;
+      background-position: center;
+      opacity: 0.25; /* deixa a imagem suave */
+      z-index: 0;
+    }
 
-  .pill{
-    display:inline-flex;
-    align-items:center;
-    gap:6px;
-    background:rgba(0,166,81,0.15);
-    border-radius:999px;
-    padding:3px 12px;
-    font-size:11px;
-    text-transform:uppercase;
-    letter-spacing:0.5px;
-    color:var(--accent);
-    border:1px solid rgba(0,166,81,0.45);
-    margin-bottom:6px;
-  }
-  .dot{
-    width:8px;
-    height:8px;
-    border-radius:50%;
-    background:var(--accent-2);
-    box-shadow:0 0 10px rgba(253,216,53,0.9);
-  }
+    header::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at left, rgba(0, 230, 118, 0.35) 0, transparent 55%);
+      z-index: 0;
+    }
 
-  .game-title{
-    margin:0 0 4px 0;
-    font-size:17px;
-    color:#ffffff;
-    font-weight:700;
-  }
-  .game-sub{
-    margin:0 0 10px 0;
-    font-size:13px;
-    color:var(--text-muted);
-  }
-  .game-sub strong{
-    color:var(--accent-2);
-    font-weight:600;
-  }
+    .branding,
+    .turma-tag {
+      position: relative;
+      z-index: 1;
+    }
 
-  button{
-    background:var(--panel);
-    color:var(--text-muted);
-    border:1px solid rgba(255,255,255,0.1);
-    padding:7px 10px;
-    border-radius:9px;
-    cursor:pointer;
-    font-weight:600;
-    font-size:13px;
-    transition:transform 0.08s ease, box-shadow 0.08s ease, background 0.08s ease;
-  }
-  button.primary{
-    background:var(--accent);
-    color:#000;
-    border-color:rgba(0,0,0,0.2);
-  }
-  button.warn{
-    background:var(--accent-2);
-    color:#000;
-  }
-  button:hover:not(:disabled){
-    transform:translateY(-1px);
-    box-shadow:0 4px 14px rgba(0,0,0,0.6);
-  }
-  button:disabled{
-    opacity:0.5;
-    cursor:not-allowed;
-  }
+    .branding {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
 
-  .row{
-    margin-bottom:10px;
-  }
+    .branding .escola {
+      color: var(--amarelo-escuro);
+      font-weight: bold;
+      letter-spacing: 1px;
+      font-size: 16px;
+      text-transform: uppercase;
+      text-shadow: 0 0 6px #000;
+    }
 
-  .status{
-    margin-top:8px;
-    padding:8px;
-    border-radius:10px;
-    background:#050505;
-    border:1px solid rgba(255,255,255,0.06);
-    font-size:13px;
-    color:#eaeaea;
-  }
-  .status strong{ color:var(--accent-2); }
+    .branding .evento {
+      color: var(--verde);
+      font-size: 13px;
+      text-shadow: 0 0 6px #000;
+    }
 
-  .history{
-    margin-top:10px;
-    max-height:220px;
-    overflow:auto;
-    padding-right:6px;
-  }
-  .entry{
-    background:linear-gradient(180deg,#050505,#0b0b0b);
-    border:1px solid rgba(255,255,255,0.05);
-    border-radius:10px;
-    padding:6px 8px;
-    font-size:12px;
-    margin-bottom:6px;
-    display:flex;
-    justify-content:space-between;
-    gap:10px;
-  }
-  .entry-main{
-    font-weight:600;
-    color:#ffffff;
-  }
-  .entry-detail{
-    color:var(--text-muted);
-    text-align:right;
-  }
+    .turma-tag {
+      background: rgba(0, 0, 0, 0.7);
+      border: 1px solid var(--verde);
+      border-radius: 999px;
+      padding: 4px 14px;
+      font-size: 11px;
+      color: #e0e0e0;
+      white-space: nowrap;
+      text-shadow: 0 0 4px #000;
+    }
 
-  .small{
-    font-size:12px;
-    color:var(--text-muted);
-  }
+    .turma-tag span {
+      color: var(--amarelo);
+      font-weight: bold;
+    }
 
-  /* MASTERMIIND – CORES */
-  .color-row{
-    display:flex;
-    gap:6px;
-    flex-wrap:wrap;
-    margin-bottom:4px;
-  }
-  .color-btn{
-    width:34px;
-    height:34px;
-    border-radius:50%;
-    border:2px solid #111;
-    cursor:pointer;
-    outline:none;
-    box-shadow:0 0 8px rgba(0,0,0,0.9);
-  }
-  .color-btn:hover{
-    transform:translateY(-1px);
-  }
-  .slot-row{
-    display:flex;
-    gap:8px;
-    margin-top:6px;
-    margin-bottom:6px;
-  }
-  .slot{
-    width:32px;
-    height:32px;
-    border-radius:50%;
-    border:2px dashed #555;
-    background:#141414;
-  }
+    /* MENU */
+    nav {
+      background: #050505;
+      border-bottom: 1px solid #333;
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      padding: 8px 12px;
+      flex-wrap: wrap;
+    }
 
-  /* NÚMERO SECRETO INPUT */
-  #guessInput{
-    width:100%;
-    max-width:220px;
-    padding:7px 9px;
-    border-radius:9px;
-    border:1px solid rgba(255,255,255,0.08);
-    background:#050505;
-    color:#f5f5f5;
-    font-size:13px;
-    outline:none;
-  }
-  #guessInput:focus{
-    border-color:var(--accent-2);
-    box-shadow:0 0 0 1px rgba(253,216,53,0.4);
-  }
+    nav button {
+      text-decoration: none;
+      color: #f5f5f5;
+      font-size: 13px;
+      padding: 6px 12px;
+      border-radius: 999px;
+      border: 1px solid #333;
+      background: #111;
+      transition: 0.2s;
+      cursor: pointer;
+    }
 
-</style>
+    nav button:hover {
+      background: var(--amarelo);
+      color: #000;
+      border-color: var(--amarelo-escuro);
+    }
+
+    nav button.ativo {
+      background: var(--amarelo);
+      color: #000;
+      border-color: var(--amarelo-escuro);
+      font-weight: bold;
+    }
+
+    main {
+      max-width: 1100px;
+      margin: 20px auto 40px;
+      padding: 0 16px;
+    }
+
+    .secao-titulo {
+      text-align: center;
+      margin-bottom: 16px;
+    }
+
+    .secao-titulo h2 {
+      font-size: 22px;
+      color: var(--verde);
+      margin-bottom: 4px;
+    }
+
+    .secao-titulo p {
+      font-size: 13px;
+      color: #bdbdbd;
+    }
+
+    .card {
+      background: var(--cinza-card);
+      border-radius: 16px;
+      border: 1px solid #333;
+      box-shadow: 0 0 18px rgba(0, 0, 0, 0.7);
+      padding: 16px;
+      position: relative;
+      overflow: hidden;
+      margin-bottom: 24px;
+    }
+
+    .card h3 {
+      font-size: 18px;
+      color: var(--amarelo);
+      margin-bottom: 6px;
+    }
+
+    .card p {
+      font-size: 13px;
+      color: #d0d0d0;
+      margin-bottom: 8px;
+    }
+
+    .layout-jogo {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 16px;
+    }
+
+    @media (max-width: 900px) {
+      .layout-jogo {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .regras-lista {
+      list-style: none;
+      margin-top: 6px;
+      font-size: 13px;
+    }
+
+    .regras-lista li {
+      margin-bottom: 6px;
+      display: flex;
+      align-items: flex-start;
+      gap: 6px;
+    }
+
+    .regras-lista li::before {
+      content: "•";
+      color: var(--verde);
+      margin-top: 2px;
+    }
+
+    .dica {
+      margin-top: 8px;
+      font-size: 12px;
+      color: #bdbdbd;
+      border-top: 1px dashed #444;
+      padding-top: 6px;
+    }
+
+    .footer-creditos {
+      text-align: center;
+      margin-top: 18px;
+      font-size: 11px;
+      color: #9e9e9e;
+    }
+
+    button {
+      margin-top: 8px;
+      padding: 8px 16px;
+      border-radius: 20px;
+      background: var(--verde-escuro);
+      color: #fff;
+      border: 1px solid var(--amarelo-escuro);
+      cursor: pointer;
+      font-size: 13px;
+      transition: 0.2s;
+    }
+
+    button:hover {
+      background: var(--amarelo);
+      color: #000;
+    }
+
+    /* ===== MASTERMIND DE CORES ===== */
+
+    #secao-mastermind {
+      display: block;
+    }
+
+    #secao-hanoi {
+      display: none;
+    }
+
+    #mm-cores-container {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .cores-opcoes {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 4px;
+    }
+
+    .cor-botao {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      border: 2px solid #333;
+      cursor: pointer;
+      box-shadow: 0 0 6px rgba(0,0,0,0.8);
+      outline: none;
+    }
+
+    .cor-botao.selecionada {
+      border-color: var(--amarelo);
+      box-shadow: 0 0 10px var(--amarelo);
+    }
+
+    .slot-sequencia {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      border: 2px dashed #555;
+      cursor: pointer;
+      margin-right: 6px;
+    }
+
+    .linha-tentativa {
+      display: flex;
+      align-items: center;
+      margin-bottom: 4px;
+      font-size: 12px;
+      font-family: "Consolas", monospace;
+    }
+
+    .mm-cores-historico {
+      max-height: 240px;
+      overflow-y: auto;
+      background: #000;
+      border-radius: 10px;
+      border: 1px solid #333;
+      padding: 6px;
+    }
+
+    #mm-cores-status {
+      font-size: 13px;
+      min-height: 18px;
+      color: #e0e0e0;
+    }
+
+    /* ===== TORRE DE HANÓI ===== */
+
+    #hanoi-card {
+      position: relative;
+    }
+
+    #game-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+    }
+
+    #game {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin-top: 10px;
+      padding: 10px;
+      background: #000;
+      border-radius: 16px;
+      border: 1px solid #333;
+      box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.8);
+    }
+
+    .torre {
+      width: 170px;
+      height: 250px;
+      display: flex;
+      flex-direction: column-reverse;
+      align-items: center;
+      position: relative;
+      cursor: pointer;
+    }
+
+    .torre-fundo,
+    .poste,
+    .base {
+      position: absolute;
+      z-index: 0;
+    }
+
+    .torre-fundo {
+      inset: 0;
+      background: radial-gradient(circle at top, #1b1b1b 0, #050505 60%);
+      border-radius: 12px;
+      border: 1px solid #333;
+      opacity: 0.9;
+    }
+
+    .poste {
+      bottom: 24px;
+      width: 10px;
+      height: 170px;
+      background: linear-gradient(180deg, #bbb, #555);
+      left: 50%;
+      transform: translateX(-50%);
+      border-radius: 4px;
+    }
+
+    .base {
+      bottom: 0;
+      height: 18px;
+      width: 100%;
+      background: linear-gradient(180deg, #666, #222);
+      border-radius: 0 0 12px 12px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.7);
+    }
+
+    .disco {
+      position: relative;
+      z-index: 1;
+      height: 22px;
+      border-radius: 999px;
+      margin-bottom: 5px;
+      text-align: center;
+      font-size: 12px;
+      line-height: 22px;
+      color: #000;
+      font-weight: bold;
+      border: 2px solid rgba(0,0,0,0.6);
+      box-shadow: 0 3px 10px rgba(0,0,0,0.9);
+    }
+
+    .size-1 { width: 80px;  background: #ff1744; }
+    .size-2 { width: 100px; background: #ff9100; }
+    .size-3 { width: 120px; background: #ffea00; }
+    .size-4 { width: 140px; background: #00e676; }
+    .size-5 { width: 160px; background: #2979ff; }
+    .size-6 { width: 180px; background: #e040fb; }
+
+    #info-hanoi {
+      font-size: 13px;
+      color: #e0e0e0;
+    }
+
+    #info-hanoi span {
+      color: var(--amarelo);
+      font-weight: bold;
+    }
+
+    #status-hanoi {
+      font-size: 13px;
+      min-height: 18px;
+      margin-top: 4px;
+      color: #bdbdbd;
+      text-align: center;
+    }
+
+    .selecionada {
+      box-shadow: 0 0 18px var(--amarelo);
+      outline: 2px solid var(--amarelo);
+    }
+
+    /* OVERLAY DE PARABÉNS – HANÓI */
+    .celebracao-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.85);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 10;
+      flex-direction: column;
+      text-align: center;
+    }
+
+    .celebracao-overlay.mostrar {
+      display: flex;
+      animation: fadeIn 0.4s ease-out;
+    }
+
+    .celebracao-conteudo h2 {
+      font-size: 26px;
+      color: var(--amarelo);
+      margin-bottom: 8px;
+    }
+
+    .celebracao-conteudo p {
+      font-size: 14px;
+      color: #f5f5f5;
+      margin-bottom: 12px;
+    }
+
+    .celebracao-conteudo button {
+      margin-top: 10px;
+    }
+
+    .balao {
+      position: absolute;
+      bottom: -60px;
+      width: 30px;
+      height: 40px;
+      border-radius: 50% 50% 45% 45%;
+      animation: subirBalao 5s linear infinite;
+      opacity: 0.9;
+    }
+
+    .balao::after {
+      content: "";
+      position: absolute;
+      width: 2px;
+      height: 20px;
+      background: #ffffff;
+      left: 50%;
+      transform: translateX(-50%);
+      bottom: -20px;
+    }
+
+    .confete {
+      position: absolute;
+      width: 6px;
+      height: 10px;
+      border-radius: 2px;
+      animation: cairConfete 3s linear infinite;
+      opacity: 0.9;
+    }
+
+    @keyframes subirBalao {
+      0% { transform: translateY(0); opacity: 0; }
+      10% { opacity: 1; }
+      100% { transform: translateY(-420px); opacity: 0; }
+    }
+
+    @keyframes cairConfete {
+      0% { transform: translateY(-50px) rotate(0deg); opacity: 0; }
+      10% { opacity: 1; }
+      100% { transform: translateY(350px) rotate(360deg); opacity: 0; }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+  </style>
 </head>
 <body>
-<div class="page">
-  <!-- CABEÇALHO PADRÃO DO SITE -->
   <header>
-    <div class="header-content">
-      <h1>CETI - PROFESSORA MARIA DE CASTRO RIBEIRO</h1>
-      <h2>Dia “D” da Educação Profissional e Tecnológica</h2>
-      <h3>Estande: Jogos de Lógica 1 e 2</h3>
-      <p>Projetos desenvolvidos pelos alunos do curso de Desenvolvimento de Sistemas – Turma B</p>
+    <div class="branding">
+      <div class="escola">CETI - PROFESSORA MARIA DE CASTRO RIBEIRO</div>
+      <div class="evento">Dia “D” da Educação Profissional e Tecnológica</div>
+    </div>
+    <div class="turma-tag">
+      Projeto desenvolvido pelos alunos de Desenvolvimento de Sistemas – <span>Turma B</span>
     </div>
   </header>
 
-  <div class="grid">
-    <!-- JOGO 1: MASTERMIND DE CORES -->
-    <section class="game-card" id="game-mastermind-colors">
-      <div class="game-inner">
-        <div class="pill"><span class="dot"></span> Jogo 1 – Mastermind de Cores</div>
-        <h2 class="game-title">Descubra a sequência secreta de 4 cores</h2>
-        <p class="game-sub">
-          Clique nas cores para montar seu palpite.  
-          O sistema mostra quantas estão na <strong>posição certa</strong> e quantas cores existem, mas em <strong>posição diferente</strong> — e já dá dicas a cada erro.
-        </p>
+  <nav>
+    <button id="btn-mastermind" class="ativo">Mastermind de Cores</button>
+    <button id="btn-hanoi">Torre de Hanói</button>
+  </nav>
 
-        <p class="small">1) Clique nas cores para preencher os 4 círculos | 2) Clique em <strong>Enviar tentativa</strong>.</p>
+  <main>
+    <!-- ================== SEÇÃO MASTERMIND ================== -->
+    <section id="secao-mastermind">
+      <div class="secao-titulo">
+        <h2>Mastermind de Cores</h2>
+        <p>Tente descobrir a sequência secreta de 4 cores usando as dicas de cada tentativa.</p>
+      </div>
 
-        <!-- Paleta de cores -->
-        <div class="row color-row" id="palette">
-          <button class="color-btn" data-color="Vermelho" style="background:#e53935;"></button>
-          <button class="color-btn" data-color="Verde"   style="background:#43a047;"></button>
-          <button class="color-btn" data-color="Azul"    style="background:#1e88e5;"></button>
-          <button class="color-btn" data-color="Amarelo" style="background:#fdd835;"></button>
-          <button class="color-btn" data-color="Roxo"    style="background:#8e24aa;"></button>
-          <button class="color-btn" data-color="Laranja" style="background:#fb8c00;"></button>
+      <div class="card">
+        <div class="layout-jogo">
+          <div>
+            <h3>Jogo Interativo</h3>
+            <p>Selecione uma cor e clique nos círculos vazios para montar sua tentativa.</p>
+
+            <div id="mm-cores-container">
+              <div class="cores-opcoes">
+                <button class="cor-botao" data-cor="R" style="background:#f44336"></button>
+                <button class="cor-botao" data-cor="G" style="background:#4caf50"></button>
+                <button class="cor-botao" data-cor="B" style="background:#2196f3"></button>
+                <button class="cor-botao" data-cor="Y" style="background:#ffeb3b"></button>
+                <button class="cor-botao" data-cor="O" style="background:#ff9800"></button>
+                <button class="cor-botao" data-cor="P" style="background:#9c27b0"></button>
+              </div>
+
+              <div style="display:flex; gap:6px; align-items:center; margin-top:4px;">
+                <div id="slot1" class="slot-sequencia"></div>
+                <div id="slot2" class="slot-sequencia"></div>
+                <div id="slot3" class="slot-sequencia"></div>
+                <div id="slot4" class="slot-sequencia"></div>
+                <button id="mm-cores-tentar">Tentar</button>
+                <button id="mm-cores-reiniciar">Novo Código</button>
+              </div>
+
+              <div id="mm-cores-status"></div>
+              <div class="mm-cores-historico" id="mm-cores-historico"></div>
+            </div>
+          </div>
+
+          <aside>
+            <h3>Como jogar?</h3>
+            <ul class="regras-lista">
+              <li>A máquina escolhe uma sequência secreta de 4 cores (podem repetir).</li>
+              <li>Escolha uma cor, clique nos círculos vazios até completar a tentativa.</li>
+              <li>O histórico mostra cada tentativa com o resultado:
+                <br>- Quantas cores estão na posição certa.<br>
+                - Quantas cores existem, mas em posição errada.
+              </li>
+              <li>Use as dicas para melhorar sua estratégia a cada rodada.</li>
+            </ul>
+            <div class="dica">
+              <strong>Dica:</strong> Nas primeiras jogadas, teste cores diferentes para descobrir quais fazem parte do código.
+            </div>
+          </aside>
         </div>
 
-        <!-- Slots da jogada atual -->
-        <div class="slot-row" id="slots">
-          <div class="slot" data-pos="0"></div>
-          <div class="slot" data-pos="1"></div>
-          <div class="slot" data-pos="2"></div>
-          <div class="slot" data-pos="3"></div>
+        <div class="footer-creditos">
+          “Lógica também é criatividade: experimentar, errar, aprender e tentar de novo.”
         </div>
-
-        <div class="row" style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
-          <button class="primary" id="mmcTry">Enviar tentativa</button>
-          <button id="mmcClear">Limpar palpite</button>
-          <button id="mmcNew">Novo código</button>
-          <span class="small" style="margin-left:auto;">Tentativas: <span id="mmcAttempts">0</span></span>
-        </div>
-
-        <div class="status" id="mmcStatus">
-          Um código secreto de 4 cores foi gerado. Monte seu primeiro palpite!
-        </div>
-
-        <!-- Histórico do Mastermind -->
-        <div class="history" id="mmcHistory"></div>
-
-        <p class="small" style="margin-top:6px;">
-          Dica pedagógica: este jogo simula como um algoritmo testa hipóteses, analisa o retorno e ajusta a solução.
-        </p>
       </div>
     </section>
 
-    <!-- JOGO 2: NÚMERO SECRETO -->
-    <section class="game-card" id="game-numero">
-      <div class="game-inner">
-        <div class="pill"><span class="dot"></span> Jogo 2 – Número Secreto</div>
-        <h2 class="game-title">Acerte o número entre 0 e 999</h2>
-        <p class="game-sub">
-          O computador sorteia um número secreto.  
-          Cada tentativa mostra se o valor é <strong>maior</strong> ou <strong>menor</strong> e libera pistas extras (par/ímpar, faixa, múltiplos, etc.).
-        </p>
+    <!-- ================== SEÇÃO TORRE DE HANÓI ================== -->
+    <section id="secao-hanoi">
+      <div class="secao-titulo">
+        <h2>Torre de Hanói</h2>
+        <p>Desafie sua lógica movendo os discos entre as torres, sem colocar um maior sobre um menor.</p>
+      </div>
 
-        <div class="row">
-          <input type="number" id="guessInput" min="0" max="999" placeholder="Digite um número de 0 a 999" />
+      <div class="card" id="hanoi-card">
+        <div class="celebracao-overlay" id="celebracao">
+          <div class="celebracao-conteudo">
+            <h2>🎉 Parabéns! 🎉</h2>
+            <p>Você completou a Torre de Hanói com <span id="movimentos-final"></span> movimentos!</p>
+            <p>Isso é raciocínio lógico, paciência e estratégia na prática. 👏</p>
+            <button id="btn-jogar-novamente">Jogar Novamente</button>
+          </div>
         </div>
 
-        <div class="row" style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
-          <button class="primary" id="btnTry">Enviar tentativa</button>
-          <button class="warn" id="btnGiveUp">Desistir / Revelar</button>
-          <button id="btnNew">Novo número</button>
-          <span class="small" style="margin-left:auto;">Tentativas: <span id="attempts">0</span></span>
+        <div class="layout-jogo">
+          <div>
+            <h3>Jogo Interativo</h3>
+            <p>Clique na torre de origem e depois na torre de destino para mover o disco.</p>
+
+            <div id="game-container">
+              <div id="info-hanoi">
+                Movimentos: <span id="movimentos-hanoi">0</span> |
+                Número de discos: <span id="numDiscos">6</span>
+              </div>
+              <div id="status-hanoi">Clique em uma torre com discos para escolher a origem.</div>
+
+              <div id="game">
+                <div class="torre" data-idx="0">
+                  <div class="torre-fundo"></div>
+                  <div class="poste"></div>
+                  <div class="base"></div>
+                </div>
+                <div class="torre" data-idx="1">
+                  <div class="torre-fundo"></div>
+                  <div class="poste"></div>
+                  <div class="base"></div>
+                </div>
+                <div class="torre" data-idx="2">
+                  <div class="torre-fundo"></div>
+                  <div class="poste"></div>
+                  <div class="base"></div>
+                </div>
+              </div>
+
+              <button id="reiniciar-hanoi">Reiniciar</button>
+            </div>
+          </div>
+
+          <aside>
+            <h3>Regras da Torre de Hanói</h3>
+            <ul class="regras-lista">
+              <li>Mova apenas <strong>um disco por vez</strong>.</li>
+              <li>Sempre mova o <strong>disco de cima</strong> de uma torre.</li>
+              <li><strong>Proibido</strong> colocar um disco maior sobre um menor.</li>
+              <li>O desafio termina quando todos os discos estiverem em outra torre, na mesma ordem.</li>
+            </ul>
+            <div class="dica">
+              <strong>Dica:</strong> Para 6 discos, o mínimo de movimentos é <strong>63</strong>.
+              Tente chegar o mais próximo possível!
+            </div>
+          </aside>
         </div>
 
-        <div class="status" id="statusBox">
-          Comece digitando um número e clicando em <strong>Enviar tentativa</strong>.
+        <div class="footer-creditos">
+          “Resolver desafios passo a passo é exatamente o que a programação nos ensina a fazer.”
         </div>
-
-        <div class="history" id="history"></div>
-
-        <p class="small" style="margin-top:6px;">
-          As pistas treinam comparação, estimativa e dedução — a mesma base usada em busca binária e análise de algoritmos.
-        </p>
       </div>
     </section>
-  </div>
-</div>
+  </main>
 
-<script>
-/* ===================================================
-   JOGO 1 – Mastermind de CORES (com dicas e histórico)
-   =================================================== */
-const COLORS = [
-  {name:"Vermelho", code:"#e53935"},
-  {name:"Verde",   code:"#43a047"},
-  {name:"Azul",    code:"#1e88e5"},
-  {name:"Amarelo", code:"#fdd835"},
-  {name:"Roxo",    code:"#8e24aa"},
-  {name:"Laranja", code:"#fb8c00"}
-];
+  <script>
+    /* ====== TROCA DE SEÇÃO (MENU) ====== */
+    const btnMastermind = document.getElementById("btn-mastermind");
+    const btnHanoi = document.getElementById("btn-hanoi");
+    const secaoMastermind = document.getElementById("secao-mastermind");
+    const secaoHanoi = document.getElementById("secao-hanoi");
 
-let mmcSecret = [];        // sequência secreta
-let mmcCurrent = [null,null,null,null];
-let mmcAttempts = 0;
+    btnMastermind.addEventListener("click", () => {
+      btnMastermind.classList.add("ativo");
+      btnHanoi.classList.remove("ativo");
+      secaoMastermind.style.display = "block";
+      secaoHanoi.style.display = "none";
+    });
 
-function gerarCodigoCores(){
-  mmcSecret = [];
-  for(let i=0;i<4;i++){
-    const rnd = Math.floor(Math.random()*COLORS.length);
-    mmcSecret.push(COLORS[rnd].name);
-  }
-  mmcCurrent = [null,null,null,null];
-  mmcAttempts = 0;
-  document.getElementById("mmcAttempts").textContent = mmcAttempts;
-  document.getElementById("mmcHistory").innerHTML = "";
-  document.getElementById("mmcStatus").textContent = "Novo código de 4 cores gerado. Monte seu palpite!";
-  atualizarSlots();
-}
+    btnHanoi.addEventListener("click", () => {
+      btnHanoi.classList.add("ativo");
+      btnMastermind.classList.remove("ativo");
+      secaoMastermind.style.display = "none";
+      secaoHanoi.style.display = "block";
+    });
 
-function atualizarSlots(){
-  const slots = document.querySelectorAll("#slots .slot");
-  slots.forEach((slot,i)=>{
-    const colorName = mmcCurrent[i];
-    if(colorName === null){
-      slot.style.background = "#141414";
-      slot.style.border = "2px dashed #555";
-    }else{
-      const c = COLORS.find(x=>x.name===colorName).code;
-      slot.style.background = c;
-      slot.style.border = "2px solid #fff";
+    /* ========= MASTERMIND DE CORES ========= */
+
+    const coresPossiveis = ["R","G","B","Y","O","P"];
+    let codigoCores = [];
+    let tentativaCores = ["","","",""];
+    let tentativasCores = 0;
+    let corAtualSelecionada = null;
+
+    function gerarCodigoCores() {
+      codigoCores = [];
+      for (let i = 0; i < 4; i++) {
+        const cor = coresPossiveis[Math.floor(Math.random() * coresPossiveis.length)];
+        codigoCores.push(cor);
+      }
+      tentativaCores = ["","","",""];
+      tentativasCores = 0;
+      const hist = document.getElementById("mm-cores-historico");
+      if (hist) hist.innerHTML = "";
+      const status = document.getElementById("mm-cores-status");
+      if (status) status.textContent =
+        "Novo código de cores gerado. Monte sua primeira tentativa!";
+      limparSlotsCores();
     }
-  });
-}
 
-function selecionarCor(colorName){
-  for(let i=0;i<4;i++){
-    if(mmcCurrent[i] === null){
-      mmcCurrent[i] = colorName;
-      break;
-    }
-  }
-  atualizarSlots();
-}
-
-function limparPalpite(){
-  mmcCurrent = [null,null,null,null];
-  atualizarSlots();
-}
-
-function analisarTentativaCores(palpite, segredo){
-  let corretas = 0;
-  let deslocadas = 0;
-
-  const usadaSeg = [false,false,false,false];
-  const usadaPal = [false,false,false,false];
-
-  // posição exata
-  for(let i=0;i<4;i++){
-    if(palpite[i] && palpite[i] === segredo[i]){
-      corretas++;
-      usadaSeg[i] = true;
-      usadaPal[i] = true;
-    }
-  }
-
-  // cor certa em posição errada
-  for(let i=0;i<4;i++){
-    if(usadaPal[i] || !palpite[i]) continue;
-    for(let j=0;j<4;j++){
-      if(usadaSeg[j]) continue;
-      if(palpite[i] === segredo[j]){
-        deslocadas++;
-        usadaPal[i] = true;
-        usadaSeg[j] = true;
-        break;
+    function limparSlotsCores() {
+      for (let i = 1; i <= 4; i++) {
+        const s = document.getElementById("slot"+i);
+        if (!s) continue;
+        s.style.background = "transparent";
+        s.style.borderStyle = "dashed";
+        tentativaCores[i-1] = "";
       }
     }
-  }
 
-  return {corretas, deslocadas};
-}
+    function corParaHex(c) {
+      switch(c){
+        case "R": return "#f44336";
+        case "G": return "#4caf50";
+        case "B": return "#2196f3";
+        case "Y": return "#ffeb3b";
+        case "O": return "#ff9800";
+        case "P": return "#9c27b0";
+        default:  return "#000";
+      }
+    }
 
-function textoDicaCores(corretas, deslocadas){
-  if(corretas === 0 && deslocadas === 0){
-    return "Nenhuma dessas cores está no código. Tente trocar TODAS as cores na próxima tentativa.";
-  }
-  if(corretas >= 1 && deslocadas === 0){
-    return "Você já tem cor(es) na posição certa. Mantenha essas e troque apenas as outras posições.";
-  }
-  if(corretas === 0 && deslocadas >= 1){
-    return "As cores existem no código, mas todas estão em posições erradas. Mantenha as mesmas cores e reorganize a ordem.";
-  }
-  if(corretas >= 1 && deslocadas >= 1){
-    return "Você tem posições certas e cores certas deslocadas. Troque poucas posições por vez para entender o efeito.";
-  }
-  return "Use o resultado para ajustar uma ou duas cores por vez e observar como os acertos mudam.";
-}
+    document.querySelectorAll(".cor-botao").forEach(btn=>{
+      btn.addEventListener("click", ()=>{
+        document.querySelectorAll(".cor-botao").forEach(b=>b.classList.remove("selecionada"));
+        btn.classList.add("selecionada");
+        corAtualSelecionada = btn.dataset.cor;
+      });
+    });
 
-function tentativaCores(){
-  const status = document.getElementById("mmcStatus");
-  const hist = document.getElementById("mmcHistory");
+    for (let i = 1; i <= 4; i++) {
+      const slot = document.getElementById("slot"+i);
+      if (!slot) continue;
+      slot.addEventListener("click", ()=>{
+        if(!corAtualSelecionada) {
+          const st = document.getElementById("mm-cores-status");
+          if (st) st.textContent =
+            "Escolha uma cor antes de clicar no círculo.";
+          return;
+        }
+        slot.style.background = corParaHex(corAtualSelecionada);
+        slot.style.borderStyle = "solid";
+        tentativaCores[i-1] = corAtualSelecionada;
+      });
+    }
 
-  if(mmcCurrent.some(x=>x===null)){
-    status.textContent = "Preencha as 4 posições com cores antes de enviar a tentativa.";
-    return;
-  }
+    function tentarCores() {
+      const status = document.getElementById("mm-cores-status");
+      const historico = document.getElementById("mm-cores-historico");
+      if (!status || !historico) return;
 
-  mmcAttempts++;
-  document.getElementById("mmcAttempts").textContent = mmcAttempts;
+      if (tentativaCores.some(c => c === "")) {
+        status.textContent =
+          "Preencha os 4 círculos com cores antes de tentar.";
+        return;
+      }
 
-  const {corretas, deslocadas} = analisarTentativaCores(mmcCurrent, mmcSecret);
-  const textoPalpite = mmcCurrent.join(" - ");
+      tentativasCores++;
 
-  // histórico – tentativa mais recente no topo
-  const entry = document.createElement("div");
-  entry.className = "entry";
+      let certoPos = 0;
+      let certoCor = 0;
 
-  const main = document.createElement("div");
-  main.className = "entry-main";
-  main.textContent = textoPalpite;
+      const codTemp = [...codigoCores];
+      const tentTemp = [...tentativaCores];
 
-  const detail = document.createElement("div");
-  detail.className = "entry-detail";
-  detail.textContent = `Cor+posição certas: ${corretas} | Cor certa em outra posição: ${deslocadas}`;
+      for (let i=0;i<4;i++) {
+        if (tentTemp[i] === codTemp[i]) {
+          certoPos++;
+          codTemp[i] = null;
+          tentTemp[i] = null;
+        }
+      }
 
-  entry.appendChild(main);
-  entry.appendChild(detail);
+      for (let i=0;i<4;i++) {
+        if (tentTemp[i] !== null) {
+          const idx = codTemp.indexOf(tentTemp[i]);
+          if (idx !== -1) {
+            certoCor++;
+            codTemp[idx] = null;
+          }
+        }
+      }
 
-  if(hist.firstChild){
-    hist.insertBefore(entry, hist.firstChild);
-  }else{
-    hist.appendChild(entry);
-  }
+      const linha = document.createElement("div");
+      linha.classList.add("linha-tentativa");
 
-  if(corretas === 4){
-    status.innerHTML = `<strong>Parabéns!</strong> Você descobriu a sequência de cores em ${mmcAttempts} tentativa(s).`;
-  }else{
-    const dica = textoDicaCores(corretas, deslocadas);
-    status.textContent = "Tentativa incorreta. " + dica;
-  }
-}
+      let bolinhas = "";
+      tentativaCores.forEach(c=>{
+        bolinhas += `<span style="display:inline-block;width:14px;height:14px;border-radius:50%;margin-right:3px;background:${corParaHex(c)}"></span>`;
+      });
 
-// Eventos Mastermind
-document.querySelectorAll("#palette .color-btn").forEach(btn=>{
-  btn.addEventListener("click", ()=>{
-    const color = btn.getAttribute("data-color");
-    selecionarCor(color);
-  });
-});
-document.getElementById("mmcTry").addEventListener("click", tentativaCores);
-document.getElementById("mmcClear").addEventListener("click", limparPalpite);
-document.getElementById("mmcNew").addEventListener("click", gerarCodigoCores);
-gerarCodigoCores();
+      if (certoPos === 4) {
+        linha.innerHTML = `${bolinhas} → ✅ 4 na posição certa!`;
+        historico.prepend(linha);
+        status.textContent =
+          "Parabéns! Você acertou a sequência de cores!";
+      } else {
+        linha.innerHTML =
+          `${bolinhas} → ${certoPos} na posição certa, ${certoCor} com cor certa em posição errada.`;
+        historico.prepend(linha);
+        status.textContent =
+          "Use as dicas da linha mais recente para ajustar sua próxima tentativa.";
+      }
+    }
 
-/* ===========================================
-   JOGO 2 – Número Secreto (com dicas crescentes)
-   =========================================== */
-let secret = 0;
-let attempts = 0;
-const maxAttempts = 15;
+    const btnTentar = document.getElementById("mm-cores-tentar");
+    if (btnTentar) btnTentar.addEventListener("click", tentarCores);
+    const btnReiniciarMM = document.getElementById("mm-cores-reiniciar");
+    if (btnReiniciarMM) btnReiniciarMM.addEventListener("click", gerarCodigoCores);
 
-const inputNum = document.getElementById('guessInput');
-const btnTry = document.getElementById('btnTry');
-const btnNew = document.getElementById('btnNew');
-const btnGiveUp = document.getElementById('btnGiveUp');
-const statusBox = document.getElementById('statusBox');
-const attemptsEl = document.getElementById('attempts');
-const historyEl = document.getElementById('history');
+    gerarCodigoCores();
 
-function sortearNumero(){
-  secret = Math.floor(Math.random()*1000);
-  attempts = 0;
-  attemptsEl.textContent = attempts;
-  historyEl.innerHTML = "";
-  statusBox.textContent = "Um novo número secreto foi sorteado. Boa sorte!";
-  inputNum.value = "";
-  inputNum.disabled = false;
-  btnTry.disabled = false;
-  btnGiveUp.disabled = false;
-  inputNum.focus();
-}
+    /* ========= TORRE DE HANÓI ========= */
 
-function addHistoryEntry(guess, msg){
-  const entry = document.createElement('div');
-  entry.className = 'entry';
+    const NUM_DISCOS = 6;
+    let torres = [[],[],[]];
+    let origemSelecionada = null;
+    let movimentosHanoi = 0;
 
-  const main = document.createElement('div');
-  main.className = 'entry-main';
-  main.textContent = guess;
+    const torresElem = document.querySelectorAll(".torre");
+    const movimentosSpanHanoi = document.getElementById("movimentos-hanoi");
+    const statusHanoi = document.getElementById("status-hanoi");
+    const numDiscosSpan = document.getElementById("numDiscos");
+    const btnReiniciarHanoi = document.getElementById("reiniciar-hanoi");
 
-  const detail = document.createElement('div');
-  detail.className = 'entry-detail';
-  detail.textContent = msg;
+    const celebracao = document.getElementById("celebracao");
+    const movimentosFinalSpan = document.getElementById("movimentos-final");
+    const btnJogarNovamente = document.getElementById("btn-jogar-novamente");
+    const cardHanoi = document.getElementById("hanoi-card");
 
-  entry.appendChild(main);
-  entry.appendChild(detail);
+    function iniciarHanoi() {
+      torres = [[],[],[]];
+      for (let t = NUM_DISCOS; t >= 1; t--) {
+        torres[0].push(t);
+      }
+      movimentosHanoi = 0;
+      if (movimentosSpanHanoi) movimentosSpanHanoi.textContent = movimentosHanoi;
+      if (numDiscosSpan) numDiscosSpan.textContent = NUM_DISCOS;
+      origemSelecionada = null;
+      limparSelecaoTorres();
+      if (statusHanoi) statusHanoi.textContent =
+        "Clique em uma torre com discos para escolher a origem.";
+      esconderCelebracao();
+      desenharHanoi();
+    }
 
-  if(historyEl.firstChild){
-    historyEl.insertBefore(entry, historyEl.firstChild);
-  }else{
-    historyEl.appendChild(entry);
-  }
-}
+    function desenharHanoi() {
+      torresElem.forEach((torreElem, idx)=>{
+        torreElem.querySelectorAll(".disco").forEach(d=>d.remove());
+        const torre = torres[idx];
+        torre.forEach((tamanho)=>{
+          const disco = document.createElement("div");
+          disco.classList.add("disco","size-"+tamanho);
+          disco.textContent = tamanho;
+          torreElem.appendChild(disco);
+        });
+      });
+    }
 
-function gerarPistaTexto(){
-  let pistas = [];
+    function limparSelecaoTorres() {
+      torresElem.forEach(t=>t.classList.remove("selecionada"));
+    }
 
-  pistas.push(`O número é ${secret % 2 === 0 ? "PAR" : "ÍMPAR"}.`);
+    function cliqueTorre(idx) {
+      if (celebracao && celebracao.classList.contains("mostrar")) return;
 
-  if(secret < 100){
-    pistas.push("Está entre 0 e 99.");
-  }else if(secret < 500){
-    pistas.push("Está entre 100 e 499.");
-  }else{
-    pistas.push("Está entre 500 e 999.");
-  }
+      if (origemSelecionada === null) {
+        if (torres[idx].length === 0) {
+          if (statusHanoi) statusHanoi.textContent =
+            "Essa torre está vazia. Escolha uma torre com discos.";
+          return;
+        }
+        origemSelecionada = idx;
+        limparSelecaoTorres();
+        torresElem[idx].classList.add("selecionada");
+        if (statusHanoi) statusHanoi.textContent =
+          `Origem selecionada: Torre ${idx+1}. Agora clique na torre de destino.`;
+      } else {
+        const origem = origemSelecionada;
+        const destino = idx;
 
-  const dezena = Math.floor(secret/10)*10;
-  pistas.push(`Fica na dezena do ${dezena}.`);
+        if (origem === destino) {
+          if (statusHanoi) statusHanoi.textContent =
+            "Origem e destino são a mesma torre. Escolha uma torre diferente.";
+          origemSelecionada = null;
+          limparSelecaoTorres();
+          return;
+        }
 
-  if(secret % 10 === 0){
-    pistas.push("É múltiplo de 10.");
-  }else if(secret % 5 === 0){
-    pistas.push("É múltiplo de 5.");
-  }else if(secret % 3 === 0){
-    pistas.push("É múltiplo de 3.");
-  }else{
-    pistas.push("Não é múltiplo de 3 nem de 5.");
-  }
+        if (movimentoValido(origem, destino)) {
+          const disco = torres[origem].pop();
+          torres[destino].push(disco);
+          movimentosHanoi++;
+          if (movimentosSpanHanoi) movimentosSpanHanoi.textContent = movimentosHanoi;
+          desenharHanoi();
+          if (statusHanoi) statusHanoi.textContent =
+            `Movido da Torre ${origem+1} para a Torre ${destino+1}.`;
 
-  const last = secret % 10;
-  pistas.push(`O último dígito é ${last}.`);
+          if (jogoConcluido()) {
+            mostrarCelebracao();
+          }
+        } else {
+          if (statusHanoi) statusHanoi.textContent =
+            "Movimento inválido! Não coloque disco maior sobre disco menor.";
+        }
 
-  return pistas;
-}
+        origemSelecionada = null;
+        limparSelecaoTorres();
+      }
+    }
 
-function verificarPalpite(){
-  if(btnTry.disabled) return;
+    function movimentoValido(origem, destino) {
+      if (torres[origem].length === 0) return false;
+      const discoOrigem = torres[origem][torres[origem].length-1];
+      if (torres[destino].length === 0) return true;
+      const discoDestino = torres[destino][torres[destino].length-1];
+      return discoOrigem < discoDestino;
+    }
 
-  const valor = parseInt(inputNum.value,10);
-  if(isNaN(valor) || valor < 0 || valor > 999){
-    statusBox.textContent = "Digite um número válido entre 0 e 999.";
-    return;
-  }
+    function jogoConcluido() {
+      return torres[1].length === NUM_DISCOS || torres[2].length === NUM_DISCOS;
+    }
 
-  attempts++;
-  attemptsEl.textContent = attempts;
+    function mostrarCelebracao() {
+      if (movimentosFinalSpan) movimentosFinalSpan.textContent = movimentosHanoi;
+      if (celebracao) celebracao.classList.add("mostrar");
+      criarBaloesEConfetes();
+      if (statusHanoi) statusHanoi.textContent =
+        `Parabéns! Você completou o desafio em ${movimentosHanoi} movimentos.`;
+    }
 
-  if(valor === secret){
-    addHistoryEntry(valor, "Acertou! Este é o número secreto.");
-    statusBox.innerHTML = `<strong>Parabéns!</strong> Você descobriu o número secreto em ${attempts} tentativa(s).`;
-    inputNum.disabled = true;
-    btnTry.disabled = true;
-    btnGiveUp.disabled = true;
-    inputNum.value = "";
-    return;
-  }else{
-    let msgBase = (valor < secret)
-      ? "O número secreto é MAIOR que esse."
-      : "O número secreto é MENOR que esse.";
+    function esconderCelebracao() {
+      if (!celebracao || !cardHanoi) return;
+      celebracao.classList.remove("mostrar");
+      cardHanoi.querySelectorAll(".balao, .confete").forEach(el=>el.remove());
+    }
 
-    const todasPistas = gerarPistaTexto();
-    let qtd = 1;
-    if(attempts >= 2) qtd = 2;
-    if(attempts >= 4) qtd = 3;
-    if(attempts >= 6) qtd = 4;
-    if(attempts >= 8) qtd = todasPistas.length;
+    function criarBaloesEConfetes() {
+      if (!cardHanoi) return;
+      const coresBaloes = ["#ff1744", "#ff9100", "#ffea00", "#00e676", "#2979ff", "#e040fb"];
+      const coresConfete = [
+        "#ff1744", "#ff9100", "#ffea00", "#00e676", "#2979ff", "#e040fb", "#ffffff"
+      ];
 
-    const usadas = todasPistas.slice(0,qtd);
-    const msg = msgBase + " " + usadas.join(" ");
+      for (let i=0;i<12;i++){
+        const balao = document.createElement("div");
+        balao.classList.add("balao");
+        balao.style.left = Math.random()*100 + "%";
+        balao.style.background = coresBaloes[Math.floor(Math.random()*coresBaloes.length)];
+        balao.style.animationDuration = (4+Math.random()*3)+"s";
+        cardHanoi.appendChild(balao);
+      }
 
-    addHistoryEntry(valor, msg);
-    statusBox.textContent = "Use as pistas para se aproximar do número secreto.";
-  }
+      for (let i=0;i<80;i++){
+        const confete = document.createElement("div");
+        confete.classList.add("confete");
+        confete.style.left = Math.random()*100 + "%";
+        confete.style.top = (Math.random()*40-40)+"px";
+        confete.style.background = coresConfete[Math.floor(Math.random()*coresConfete.length)];
+        confete.style.animationDuration = (2+Math.random()*2)+"s";
+        cardHanoi.appendChild(confete);
+      }
+    }
 
-  if(attempts >= maxAttempts){
-    statusBox.innerHTML = `Número máximo de tentativas atingido. O número secreto era <strong>${secret}</strong>.`;
-    inputNum.disabled = true;
-    btnTry.disabled = true;
-    btnGiveUp.disabled = true;
-  }
+    torresElem.forEach((elem,idx)=>{
+      elem.addEventListener("click", ()=>cliqueTorre(idx));
+    });
+    if (btnReiniciarHanoi) btnReiniciarHanoi.addEventListener("click", iniciarHanoi);
+    if (btnJogarNovamente) btnJogarNovamente.addEventListener("click", iniciarHanoi);
 
-  inputNum.value = "";
-  inputNum.focus();
-}
-
-// Eventos Número Secreto
-btnTry.addEventListener('click', verificarPalpite);
-btnNew.addEventListener('click', sortearNumero);
-btnGiveUp.addEventListener('click', ()=>{
-  statusBox.innerHTML = `Você desistiu. O número secreto era <strong>${secret}</strong>. Clique em "Novo número" para jogar de novo.`;
-  inputNum.disabled = true;
-  btnTry.disabled = true;
-  btnGiveUp.disabled = true;
-});
-inputNum.addEventListener('keydown', (e)=>{
-  if(e.key === 'Enter'){
-    verificarPalpite();
-  }
-});
-
-// inicia jogo
-sortearNumero();
-</script>
+    iniciarHanoi();
+  </script>
 </body>
 </html>
