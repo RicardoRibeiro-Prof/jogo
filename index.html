@@ -1,0 +1,698 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>CETI – Jogos de Lógica</title>
+<style>
+  :root{
+    --bg:#050505;
+    --panel:#0e0e0e;
+    --accent:#00a651;      /* verde CETI */
+    --accent-2:#fdd835;    /* amarelo CETI */
+    --border-soft:rgba(255,255,255,0.06);
+    --text-main:#f5f5f5;
+    --text-muted:#cfcfcf;
+  }
+  *{ box-sizing:border-box; }
+  body{
+    margin:0;
+    font-family:Inter, Segoe UI, Arial, sans-serif;
+    background:radial-gradient(circle at top,#111 0,#050505 55%,#000 100%);
+    color:var(--text-main);
+    min-height:100vh;
+  }
+
+  .page{
+    max-width:1200px;
+    margin:0 auto;
+    padding:24px 16px 40px;
+  }
+
+  /* CABEÇALHO IGUAL AO SITE DOS ESTANDES */
+  header{
+    border-radius:18px;
+    padding:18px 18px 16px;
+    background:linear-gradient(135deg,rgba(0,166,81,0.14),rgba(253,216,53,0.10));
+    border:1px solid rgba(253,216,53,0.55);
+    box-shadow:0 14px 40px rgba(0,0,0,0.7);
+    margin-bottom:22px;
+    position:relative;
+    overflow:hidden;
+  }
+  header::before{
+    content:"";
+    position:absolute;
+    inset:-40%;
+    background:
+      radial-gradient(circle at 15% 0,rgba(0,166,81,0.45),transparent 55%),
+      radial-gradient(circle at 90% 20%,rgba(253,216,53,0.45),transparent 55%);
+    opacity:0.7;
+    pointer-events:none;
+  }
+  .header-content{
+    position:relative;
+    z-index:2;
+  }
+  header h1{
+    margin:0;
+    color:var(--accent-2);
+    font-size:22px;
+    text-transform:uppercase;
+    letter-spacing:0.6px;
+    font-weight:800;
+  }
+  header h2{
+    margin:6px 0 2px 0;
+    color:var(--text-main);
+    font-size:18px;
+    font-weight:600;
+  }
+  header h3{
+    margin:0 0 6px 0;
+    color:var(--accent);
+    font-size:15px;
+    font-weight:600;
+  }
+  header p{
+    margin:0;
+    font-size:13px;
+    color:var(--text-muted);
+  }
+
+  /* GRID DOS JOGOS (2 CARDS LADO A LADO) */
+  .grid{
+    display:grid;
+    grid-template-columns:1.1fr 0.9fr;
+    gap:18px;
+  }
+  @media(max-width:960px){
+    .grid{ grid-template-columns:1fr; }
+  }
+
+  /* CARDS */
+  .game-card{
+    background:linear-gradient(180deg,#060606,#101010);
+    border-radius:16px;
+    padding:16px 16px 14px;
+    border:1px solid var(--border-soft);
+    box-shadow:0 10px 30px rgba(0,0,0,0.75);
+    position:relative;
+    overflow:hidden;
+  }
+  .game-card::before{
+    content:"";
+    position:absolute;
+    inset:-30%;
+    background:
+      radial-gradient(circle at top left,rgba(0,166,81,0.13),transparent 55%),
+      radial-gradient(circle at bottom right,rgba(253,216,53,0.10),transparent 55%);
+    opacity:0.9;
+    pointer-events:none;
+  }
+  .game-inner{
+    position:relative;
+    z-index:2;
+  }
+
+  .pill{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    background:rgba(0,166,81,0.15);
+    border-radius:999px;
+    padding:3px 12px;
+    font-size:11px;
+    text-transform:uppercase;
+    letter-spacing:0.5px;
+    color:var(--accent);
+    border:1px solid rgba(0,166,81,0.45);
+    margin-bottom:6px;
+  }
+  .dot{
+    width:8px;
+    height:8px;
+    border-radius:50%;
+    background:var(--accent-2);
+    box-shadow:0 0 10px rgba(253,216,53,0.9);
+  }
+
+  .game-title{
+    margin:0 0 4px 0;
+    font-size:17px;
+    color:#ffffff;
+    font-weight:700;
+  }
+  .game-sub{
+    margin:0 0 10px 0;
+    font-size:13px;
+    color:var(--text-muted);
+  }
+  .game-sub strong{
+    color:var(--accent-2);
+    font-weight:600;
+  }
+
+  button{
+    background:var(--panel);
+    color:var(--text-muted);
+    border:1px solid rgba(255,255,255,0.1);
+    padding:7px 10px;
+    border-radius:9px;
+    cursor:pointer;
+    font-weight:600;
+    font-size:13px;
+    transition:transform 0.08s ease, box-shadow 0.08s ease, background 0.08s ease;
+  }
+  button.primary{
+    background:var(--accent);
+    color:#000;
+    border-color:rgba(0,0,0,0.2);
+  }
+  button.warn{
+    background:var(--accent-2);
+    color:#000;
+  }
+  button:hover:not(:disabled){
+    transform:translateY(-1px);
+    box-shadow:0 4px 14px rgba(0,0,0,0.6);
+  }
+  button:disabled{
+    opacity:0.5;
+    cursor:not-allowed;
+  }
+
+  .row{
+    margin-bottom:10px;
+  }
+
+  .status{
+    margin-top:8px;
+    padding:8px;
+    border-radius:10px;
+    background:#050505;
+    border:1px solid rgba(255,255,255,0.06);
+    font-size:13px;
+    color:#eaeaea;
+  }
+  .status strong{ color:var(--accent-2); }
+
+  .history{
+    margin-top:10px;
+    max-height:220px;
+    overflow:auto;
+    padding-right:6px;
+  }
+  .entry{
+    background:linear-gradient(180deg,#050505,#0b0b0b);
+    border:1px solid rgba(255,255,255,0.05);
+    border-radius:10px;
+    padding:6px 8px;
+    font-size:12px;
+    margin-bottom:6px;
+    display:flex;
+    justify-content:space-between;
+    gap:10px;
+  }
+  .entry-main{
+    font-weight:600;
+    color:#ffffff;
+  }
+  .entry-detail{
+    color:var(--text-muted);
+    text-align:right;
+  }
+
+  .small{
+    font-size:12px;
+    color:var(--text-muted);
+  }
+
+  /* MASTERMIIND – CORES */
+  .color-row{
+    display:flex;
+    gap:6px;
+    flex-wrap:wrap;
+    margin-bottom:4px;
+  }
+  .color-btn{
+    width:34px;
+    height:34px;
+    border-radius:50%;
+    border:2px solid #111;
+    cursor:pointer;
+    outline:none;
+    box-shadow:0 0 8px rgba(0,0,0,0.9);
+  }
+  .color-btn:hover{
+    transform:translateY(-1px);
+  }
+  .slot-row{
+    display:flex;
+    gap:8px;
+    margin-top:6px;
+    margin-bottom:6px;
+  }
+  .slot{
+    width:32px;
+    height:32px;
+    border-radius:50%;
+    border:2px dashed #555;
+    background:#141414;
+  }
+
+  /* NÚMERO SECRETO INPUT */
+  #guessInput{
+    width:100%;
+    max-width:220px;
+    padding:7px 9px;
+    border-radius:9px;
+    border:1px solid rgba(255,255,255,0.08);
+    background:#050505;
+    color:#f5f5f5;
+    font-size:13px;
+    outline:none;
+  }
+  #guessInput:focus{
+    border-color:var(--accent-2);
+    box-shadow:0 0 0 1px rgba(253,216,53,0.4);
+  }
+
+</style>
+</head>
+<body>
+<div class="page">
+  <!-- CABEÇALHO PADRÃO DO SITE -->
+  <header>
+    <div class="header-content">
+      <h1>CETI - PROFESSORA MARIA DE CASTRO RIBEIRO</h1>
+      <h2>Dia “D” da Educação Profissional e Tecnológica</h2>
+      <h3>Estande: Jogos de Lógica 1 e 2</h3>
+      <p>Projetos desenvolvidos pelos alunos do curso de Desenvolvimento de Sistemas – Turma B</p>
+    </div>
+  </header>
+
+  <div class="grid">
+    <!-- JOGO 1: MASTERMIND DE CORES -->
+    <section class="game-card" id="game-mastermind-colors">
+      <div class="game-inner">
+        <div class="pill"><span class="dot"></span> Jogo 1 – Mastermind de Cores</div>
+        <h2 class="game-title">Descubra a sequência secreta de 4 cores</h2>
+        <p class="game-sub">
+          Clique nas cores para montar seu palpite.  
+          O sistema mostra quantas estão na <strong>posição certa</strong> e quantas cores existem, mas em <strong>posição diferente</strong> — e já dá dicas a cada erro.
+        </p>
+
+        <p class="small">1) Clique nas cores para preencher os 4 círculos | 2) Clique em <strong>Enviar tentativa</strong>.</p>
+
+        <!-- Paleta de cores -->
+        <div class="row color-row" id="palette">
+          <button class="color-btn" data-color="Vermelho" style="background:#e53935;"></button>
+          <button class="color-btn" data-color="Verde"   style="background:#43a047;"></button>
+          <button class="color-btn" data-color="Azul"    style="background:#1e88e5;"></button>
+          <button class="color-btn" data-color="Amarelo" style="background:#fdd835;"></button>
+          <button class="color-btn" data-color="Roxo"    style="background:#8e24aa;"></button>
+          <button class="color-btn" data-color="Laranja" style="background:#fb8c00;"></button>
+        </div>
+
+        <!-- Slots da jogada atual -->
+        <div class="slot-row" id="slots">
+          <div class="slot" data-pos="0"></div>
+          <div class="slot" data-pos="1"></div>
+          <div class="slot" data-pos="2"></div>
+          <div class="slot" data-pos="3"></div>
+        </div>
+
+        <div class="row" style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+          <button class="primary" id="mmcTry">Enviar tentativa</button>
+          <button id="mmcClear">Limpar palpite</button>
+          <button id="mmcNew">Novo código</button>
+          <span class="small" style="margin-left:auto;">Tentativas: <span id="mmcAttempts">0</span></span>
+        </div>
+
+        <div class="status" id="mmcStatus">
+          Um código secreto de 4 cores foi gerado. Monte seu primeiro palpite!
+        </div>
+
+        <!-- Histórico do Mastermind -->
+        <div class="history" id="mmcHistory"></div>
+
+        <p class="small" style="margin-top:6px;">
+          Dica pedagógica: este jogo simula como um algoritmo testa hipóteses, analisa o retorno e ajusta a solução.
+        </p>
+      </div>
+    </section>
+
+    <!-- JOGO 2: NÚMERO SECRETO -->
+    <section class="game-card" id="game-numero">
+      <div class="game-inner">
+        <div class="pill"><span class="dot"></span> Jogo 2 – Número Secreto</div>
+        <h2 class="game-title">Acerte o número entre 0 e 999</h2>
+        <p class="game-sub">
+          O computador sorteia um número secreto.  
+          Cada tentativa mostra se o valor é <strong>maior</strong> ou <strong>menor</strong> e libera pistas extras (par/ímpar, faixa, múltiplos, etc.).
+        </p>
+
+        <div class="row">
+          <input type="number" id="guessInput" min="0" max="999" placeholder="Digite um número de 0 a 999" />
+        </div>
+
+        <div class="row" style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+          <button class="primary" id="btnTry">Enviar tentativa</button>
+          <button class="warn" id="btnGiveUp">Desistir / Revelar</button>
+          <button id="btnNew">Novo número</button>
+          <span class="small" style="margin-left:auto;">Tentativas: <span id="attempts">0</span></span>
+        </div>
+
+        <div class="status" id="statusBox">
+          Comece digitando um número e clicando em <strong>Enviar tentativa</strong>.
+        </div>
+
+        <div class="history" id="history"></div>
+
+        <p class="small" style="margin-top:6px;">
+          As pistas treinam comparação, estimativa e dedução — a mesma base usada em busca binária e análise de algoritmos.
+        </p>
+      </div>
+    </section>
+  </div>
+</div>
+
+<script>
+/* ===================================================
+   JOGO 1 – Mastermind de CORES (com dicas e histórico)
+   =================================================== */
+const COLORS = [
+  {name:"Vermelho", code:"#e53935"},
+  {name:"Verde",   code:"#43a047"},
+  {name:"Azul",    code:"#1e88e5"},
+  {name:"Amarelo", code:"#fdd835"},
+  {name:"Roxo",    code:"#8e24aa"},
+  {name:"Laranja", code:"#fb8c00"}
+];
+
+let mmcSecret = [];        // sequência secreta
+let mmcCurrent = [null,null,null,null];
+let mmcAttempts = 0;
+
+function gerarCodigoCores(){
+  mmcSecret = [];
+  for(let i=0;i<4;i++){
+    const rnd = Math.floor(Math.random()*COLORS.length);
+    mmcSecret.push(COLORS[rnd].name);
+  }
+  mmcCurrent = [null,null,null,null];
+  mmcAttempts = 0;
+  document.getElementById("mmcAttempts").textContent = mmcAttempts;
+  document.getElementById("mmcHistory").innerHTML = "";
+  document.getElementById("mmcStatus").textContent = "Novo código de 4 cores gerado. Monte seu palpite!";
+  atualizarSlots();
+}
+
+function atualizarSlots(){
+  const slots = document.querySelectorAll("#slots .slot");
+  slots.forEach((slot,i)=>{
+    const colorName = mmcCurrent[i];
+    if(colorName === null){
+      slot.style.background = "#141414";
+      slot.style.border = "2px dashed #555";
+    }else{
+      const c = COLORS.find(x=>x.name===colorName).code;
+      slot.style.background = c;
+      slot.style.border = "2px solid #fff";
+    }
+  });
+}
+
+function selecionarCor(colorName){
+  for(let i=0;i<4;i++){
+    if(mmcCurrent[i] === null){
+      mmcCurrent[i] = colorName;
+      break;
+    }
+  }
+  atualizarSlots();
+}
+
+function limparPalpite(){
+  mmcCurrent = [null,null,null,null];
+  atualizarSlots();
+}
+
+function analisarTentativaCores(palpite, segredo){
+  let corretas = 0;
+  let deslocadas = 0;
+
+  const usadaSeg = [false,false,false,false];
+  const usadaPal = [false,false,false,false];
+
+  // posição exata
+  for(let i=0;i<4;i++){
+    if(palpite[i] && palpite[i] === segredo[i]){
+      corretas++;
+      usadaSeg[i] = true;
+      usadaPal[i] = true;
+    }
+  }
+
+  // cor certa em posição errada
+  for(let i=0;i<4;i++){
+    if(usadaPal[i] || !palpite[i]) continue;
+    for(let j=0;j<4;j++){
+      if(usadaSeg[j]) continue;
+      if(palpite[i] === segredo[j]){
+        deslocadas++;
+        usadaPal[i] = true;
+        usadaSeg[j] = true;
+        break;
+      }
+    }
+  }
+
+  return {corretas, deslocadas};
+}
+
+function textoDicaCores(corretas, deslocadas){
+  if(corretas === 0 && deslocadas === 0){
+    return "Nenhuma dessas cores está no código. Tente trocar TODAS as cores na próxima tentativa.";
+  }
+  if(corretas >= 1 && deslocadas === 0){
+    return "Você já tem cor(es) na posição certa. Mantenha essas e troque apenas as outras posições.";
+  }
+  if(corretas === 0 && deslocadas >= 1){
+    return "As cores existem no código, mas todas estão em posições erradas. Mantenha as mesmas cores e reorganize a ordem.";
+  }
+  if(corretas >= 1 && deslocadas >= 1){
+    return "Você tem posições certas e cores certas deslocadas. Troque poucas posições por vez para entender o efeito.";
+  }
+  return "Use o resultado para ajustar uma ou duas cores por vez e observar como os acertos mudam.";
+}
+
+function tentativaCores(){
+  const status = document.getElementById("mmcStatus");
+  const hist = document.getElementById("mmcHistory");
+
+  if(mmcCurrent.some(x=>x===null)){
+    status.textContent = "Preencha as 4 posições com cores antes de enviar a tentativa.";
+    return;
+  }
+
+  mmcAttempts++;
+  document.getElementById("mmcAttempts").textContent = mmcAttempts;
+
+  const {corretas, deslocadas} = analisarTentativaCores(mmcCurrent, mmcSecret);
+  const textoPalpite = mmcCurrent.join(" - ");
+
+  // histórico – tentativa mais recente no topo
+  const entry = document.createElement("div");
+  entry.className = "entry";
+
+  const main = document.createElement("div");
+  main.className = "entry-main";
+  main.textContent = textoPalpite;
+
+  const detail = document.createElement("div");
+  detail.className = "entry-detail";
+  detail.textContent = `Cor+posição certas: ${corretas} | Cor certa em outra posição: ${deslocadas}`;
+
+  entry.appendChild(main);
+  entry.appendChild(detail);
+
+  if(hist.firstChild){
+    hist.insertBefore(entry, hist.firstChild);
+  }else{
+    hist.appendChild(entry);
+  }
+
+  if(corretas === 4){
+    status.innerHTML = `<strong>Parabéns!</strong> Você descobriu a sequência de cores em ${mmcAttempts} tentativa(s).`;
+  }else{
+    const dica = textoDicaCores(corretas, deslocadas);
+    status.textContent = "Tentativa incorreta. " + dica;
+  }
+}
+
+// Eventos Mastermind
+document.querySelectorAll("#palette .color-btn").forEach(btn=>{
+  btn.addEventListener("click", ()=>{
+    const color = btn.getAttribute("data-color");
+    selecionarCor(color);
+  });
+});
+document.getElementById("mmcTry").addEventListener("click", tentativaCores);
+document.getElementById("mmcClear").addEventListener("click", limparPalpite);
+document.getElementById("mmcNew").addEventListener("click", gerarCodigoCores);
+gerarCodigoCores();
+
+/* ===========================================
+   JOGO 2 – Número Secreto (com dicas crescentes)
+   =========================================== */
+let secret = 0;
+let attempts = 0;
+const maxAttempts = 15;
+
+const inputNum = document.getElementById('guessInput');
+const btnTry = document.getElementById('btnTry');
+const btnNew = document.getElementById('btnNew');
+const btnGiveUp = document.getElementById('btnGiveUp');
+const statusBox = document.getElementById('statusBox');
+const attemptsEl = document.getElementById('attempts');
+const historyEl = document.getElementById('history');
+
+function sortearNumero(){
+  secret = Math.floor(Math.random()*1000);
+  attempts = 0;
+  attemptsEl.textContent = attempts;
+  historyEl.innerHTML = "";
+  statusBox.textContent = "Um novo número secreto foi sorteado. Boa sorte!";
+  inputNum.value = "";
+  inputNum.disabled = false;
+  btnTry.disabled = false;
+  btnGiveUp.disabled = false;
+  inputNum.focus();
+}
+
+function addHistoryEntry(guess, msg){
+  const entry = document.createElement('div');
+  entry.className = 'entry';
+
+  const main = document.createElement('div');
+  main.className = 'entry-main';
+  main.textContent = guess;
+
+  const detail = document.createElement('div');
+  detail.className = 'entry-detail';
+  detail.textContent = msg;
+
+  entry.appendChild(main);
+  entry.appendChild(detail);
+
+  if(historyEl.firstChild){
+    historyEl.insertBefore(entry, historyEl.firstChild);
+  }else{
+    historyEl.appendChild(entry);
+  }
+}
+
+function gerarPistaTexto(){
+  let pistas = [];
+
+  pistas.push(`O número é ${secret % 2 === 0 ? "PAR" : "ÍMPAR"}.`);
+
+  if(secret < 100){
+    pistas.push("Está entre 0 e 99.");
+  }else if(secret < 500){
+    pistas.push("Está entre 100 e 499.");
+  }else{
+    pistas.push("Está entre 500 e 999.");
+  }
+
+  const dezena = Math.floor(secret/10)*10;
+  pistas.push(`Fica na dezena do ${dezena}.`);
+
+  if(secret % 10 === 0){
+    pistas.push("É múltiplo de 10.");
+  }else if(secret % 5 === 0){
+    pistas.push("É múltiplo de 5.");
+  }else if(secret % 3 === 0){
+    pistas.push("É múltiplo de 3.");
+  }else{
+    pistas.push("Não é múltiplo de 3 nem de 5.");
+  }
+
+  const last = secret % 10;
+  pistas.push(`O último dígito é ${last}.`);
+
+  return pistas;
+}
+
+function verificarPalpite(){
+  if(btnTry.disabled) return;
+
+  const valor = parseInt(inputNum.value,10);
+  if(isNaN(valor) || valor < 0 || valor > 999){
+    statusBox.textContent = "Digite um número válido entre 0 e 999.";
+    return;
+  }
+
+  attempts++;
+  attemptsEl.textContent = attempts;
+
+  if(valor === secret){
+    addHistoryEntry(valor, "Acertou! Este é o número secreto.");
+    statusBox.innerHTML = `<strong>Parabéns!</strong> Você descobriu o número secreto em ${attempts} tentativa(s).`;
+    inputNum.disabled = true;
+    btnTry.disabled = true;
+    btnGiveUp.disabled = true;
+    inputNum.value = "";
+    return;
+  }else{
+    let msgBase = (valor < secret)
+      ? "O número secreto é MAIOR que esse."
+      : "O número secreto é MENOR que esse.";
+
+    const todasPistas = gerarPistaTexto();
+    let qtd = 1;
+    if(attempts >= 2) qtd = 2;
+    if(attempts >= 4) qtd = 3;
+    if(attempts >= 6) qtd = 4;
+    if(attempts >= 8) qtd = todasPistas.length;
+
+    const usadas = todasPistas.slice(0,qtd);
+    const msg = msgBase + " " + usadas.join(" ");
+
+    addHistoryEntry(valor, msg);
+    statusBox.textContent = "Use as pistas para se aproximar do número secreto.";
+  }
+
+  if(attempts >= maxAttempts){
+    statusBox.innerHTML = `Número máximo de tentativas atingido. O número secreto era <strong>${secret}</strong>.`;
+    inputNum.disabled = true;
+    btnTry.disabled = true;
+    btnGiveUp.disabled = true;
+  }
+
+  inputNum.value = "";
+  inputNum.focus();
+}
+
+// Eventos Número Secreto
+btnTry.addEventListener('click', verificarPalpite);
+btnNew.addEventListener('click', sortearNumero);
+btnGiveUp.addEventListener('click', ()=>{
+  statusBox.innerHTML = `Você desistiu. O número secreto era <strong>${secret}</strong>. Clique em "Novo número" para jogar de novo.`;
+  inputNum.disabled = true;
+  btnTry.disabled = true;
+  btnGiveUp.disabled = true;
+});
+inputNum.addEventListener('keydown', (e)=>{
+  if(e.key === 'Enter'){
+    verificarPalpite();
+  }
+});
+
+// inicia jogo
+sortearNumero();
+</script>
+</body>
+</html>
