@@ -1,7 +1,7 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-  <meta charset="UTF-8" />
+<!-- saved from url=(0043)https://ricardoribeiro-prof.github.io/jogo/ -->
+<html lang="pt-BR"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  
   <title>Jogos de Lógica – Turma B | CETI Maria de Castro Ribeiro</title>
   <style>
     :root {
@@ -29,7 +29,7 @@
     /* CABEÇALHO COM IMAGEM DE FUNDO */
     header {
       background: linear-gradient(90deg, #000 0%, #004d26 40%, #000 100%);
-      padding: 16px 24px;
+      padding: 52px 24px;
       border-bottom: 2px solid var(--amarelo-escuro);
       display: flex;
       flex-wrap: wrap;
@@ -524,13 +524,13 @@
   </header>
 
   <nav>
-    <button id="btn-mastermind" class="ativo">Mastermind de Cores</button>
-    <button id="btn-hanoi">Torre de Hanói</button>
+    <button id="btn-mastermind" class="">Mastermind de Cores</button>
+    <button id="btn-hanoi" class="ativo">Torre de Hanói</button>
   </nav>
 
   <main>
     <!-- ================== SEÇÃO MASTERMIND ================== -->
-    <section id="secao-mastermind">
+    <section id="secao-mastermind" style="display: none;">
       <div class="secao-titulo">
         <h2>Mastermind de Cores</h2>
         <p>Tente descobrir a sequência secreta de 4 cores usando as dicas de cada tentativa.</p>
@@ -553,15 +553,15 @@
               </div>
 
               <div style="display:flex; gap:6px; align-items:center; margin-top:4px;">
-                <div id="slot1" class="slot-sequencia"></div>
-                <div id="slot2" class="slot-sequencia"></div>
-                <div id="slot3" class="slot-sequencia"></div>
-                <div id="slot4" class="slot-sequencia"></div>
+                <div id="slot1" class="slot-sequencia" style="background: transparent; border-style: dashed;"></div>
+                <div id="slot2" class="slot-sequencia" style="background: transparent; border-style: dashed;"></div>
+                <div id="slot3" class="slot-sequencia" style="background: transparent; border-style: dashed;"></div>
+                <div id="slot4" class="slot-sequencia" style="background: transparent; border-style: dashed;"></div>
                 <button id="mm-cores-tentar">Tentar</button>
                 <button id="mm-cores-reiniciar">Novo Código</button>
               </div>
 
-              <div id="mm-cores-status"></div>
+              <div id="mm-cores-status">Novo código de cores gerado. Monte sua primeira tentativa!</div>
               <div class="mm-cores-historico" id="mm-cores-historico"></div>
             </div>
           </div>
@@ -590,7 +590,7 @@
     </section>
 
     <!-- ================== SEÇÃO TORRE DE HANÓI ================== -->
-    <section id="secao-hanoi">
+    <section id="secao-hanoi" style="display: block;">
       <div class="secao-titulo">
         <h2>Torre de Hanói</h2>
         <p>Desafie sua lógica movendo os discos entre as torres, sem colocar um maior sobre um menor.</p>
@@ -623,7 +623,7 @@
                   <div class="torre-fundo"></div>
                   <div class="poste"></div>
                   <div class="base"></div>
-                </div>
+                <div class="disco size-6">6</div><div class="disco size-5">5</div><div class="disco size-4">4</div><div class="disco size-3">3</div><div class="disco size-2">2</div><div class="disco size-1">1</div></div>
                 <div class="torre" data-idx="1">
                   <div class="torre-fundo"></div>
                   <div class="poste"></div>
@@ -656,7 +656,8 @@
         </div>
 
         <div class="footer-creditos">
-          “Resolver desafios passo a passo é exatamente o que a programação nos ensina a fazer.”
+          “Resolver desafios passo a passo é exatamente o que a programação nos ensina a fazer.”<br><br><br><br>
+	   Curso de Desenvolvimento de Sistemas - Turma "B" 2025.
         </div>
       </div>
     </section>
@@ -979,5 +980,6 @@
 
     iniciarHanoi();
   </script>
-</body>
-</html>
+
+
+</body></html>
