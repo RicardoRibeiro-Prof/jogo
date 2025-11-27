@@ -1,211 +1,983 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>CETI – Turma B de Desenvolvimento de Sistemas</title>
-<style>
-  :root{
-    --bg:#050505;
-    --panel:#0e0e0e;
-    --accent:#00a651;      
-    --accent-2:#fdd835;    
-    --border-soft:rgba(255,255,255,0.08);
-    --text-main:#f5f5f5;
-    --text-muted:#cfcfcf;
-  }
-  *{ box-sizing:border-box; }
-  body{
-    margin:0;
-    font-family:Inter, Segoe UI, Arial, sans-serif;
-    background:radial-gradient(circle at top,#111 0,#050505 55%,#000 100%);
-    color:var(--text-main);
-    min-height:100vh;
-  }
-  .page{
-    max-width:1100px;
-    margin:0 auto;
-    padding:24px 16px 40px;
-  }
-  header{
-    border-radius:18px;
-    padding:18px 18px 16px;
-    background:linear-gradient(135deg,rgba(0,166,81,0.18),rgba(253,216,53,0.12));
-    border:1px solid rgba(253,216,53,0.55);
-    box-shadow:0 14px 40px rgba(0,0,0,0.7);
-    margin-bottom:24px;
-    position:relative;
-    overflow:hidden;
-  }
-  header::before{
-    content:"";
-    position:absolute;
-    inset:-40%;
-    background:
-      radial-gradient(circle at 15% 0,rgba(0,166,81,0.45),transparent 60%),
-      radial-gradient(circle at 90% 20%,rgba(253,216,53,0.45),transparent 60%);
-    opacity:0.7;
-    pointer-events:none;
-  }
-  .header-content{position:relative; z-index:2;}
-  header h1{margin:0; color:var(--accent-2); font-size:22px; text-transform:uppercase; letter-spacing:0.7px; font-weight:800;}
-  header h2{margin:6px 0 2px 0; color:#fff; font-size:18px; font-weight:600;}
-  header h3{margin:0 0 6px 0; color:var(--accent); font-size:15px; font-weight:600;}
-  header p{margin:0; font-size:13px; color:var(--text-muted);}
-  .section{margin-bottom:18px; border-radius:16px; background:linear-gradient(180deg,#060606,#101010); border:1px solid var(--border-soft); box-shadow:0 10px 30px rgba(0,0,0,0.8); padding:16px 16px 14px;}
-  .section h2{margin:0 0 8px; font-size:18px; color:var(--accent-2);}
-  .section p{margin:0 0 8px; font-size:14px; color:var(--text-main);}
-  .section ul{margin:6px 0 4px 18px; font-size:14px; color:var(--text-muted);}
-  .pill{display:inline-flex; align-items:center; gap:6px; background:rgba(0,166,81,0.15); border-radius:999px; padding:3px 11px; font-size:11px; text-transform:uppercase; letter-spacing:0.5px; color:var(--accent); border:1px solid rgba(0,166,81,0.5); margin-bottom:6px;}
-  .dot{width:8px; height:8px; border-radius:50%; background:var(--accent-2); box-shadow:0 0 10px rgba(253,216,53,0.9);}
-  .grid-main{display:grid; grid-template-columns:1.1fr 0.9fr; gap:18px; align-items:stretch;}
-  @media(max-width:900px){.grid-main{ grid-template-columns:1fr; }}
-  .photo-box{border-radius:16px; background:radial-gradient(circle at top,#1b1b1b,#050505); border:1px solid var(--border-soft); padding:10px; display:flex; flex-direction:column; gap:8px; justify-content:space-between;}
-  .photo-box img{border-radius:14px; width:100%; height:auto; border:1px solid rgba(253,216,53,0.7);}
-  .tagline{font-size:13px; color:var(--text-muted); margin-top:2px;}
-  .projects-grid{display:grid; grid-template-columns:repeat(auto-fit, minmax(220px,1fr)); gap:12px; margin-top:8px;}
-  .project-card{background:linear-gradient(180deg,#050505,#0b0b0b); border-radius:12px; border:1px solid rgba(255,255,255,0.06); padding:10px 10px 8px; font-size:13px;}
-  .project-card h3{margin:0 0 4px; font-size:14px; color:#fff;}
-  .project-card p{margin:0; font-size:13px; color:var(--text-muted);}
-  .students-list{display:flex; flex-wrap:wrap; gap:6px; margin-top:4px;}
-  .student-pill{border-radius:999px; padding:4px 9px; font-size:12px; background:#050505; border:1px solid rgba(255,255,255,0.08); color:var(--text-muted);}
-  footer{margin-top:24px; font-size:12px; color:var(--text-muted); text-align:center;}
-  footer strong{color:var(--accent-2);}
-</style>
+  <meta charset="UTF-8" />
+  <title>Jogos de Lógica – Turma B | CETI Maria de Castro Ribeiro</title>
+  <style>
+    :root {
+      --verde: #00e676;
+      --verde-escuro: #004d26;
+      --amarelo: #fdd835;
+      --amarelo-escuro: #fbc02d;
+      --preto: #000000;
+      --cinza-card: #111111;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background: radial-gradient(circle at top, #222 0, #000 55%, #000 100%);
+      color: #f5f5f5;
+      min-height: 100vh;
+    }
+
+    /* CABEÇALHO COM IMAGEM DE FUNDO */
+    header {
+      background: linear-gradient(90deg, #000 0%, #004d26 40%, #000 100%);
+      padding: 52px 24px;
+      border-bottom: 2px solid var(--amarelo-escuro);
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    header::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image: url("https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=1600&q=80");
+      background-size: cover;
+      background-position: center;
+      opacity: 0.25; /* deixa a imagem suave */
+      z-index: 0;
+    }
+
+    header::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at left, rgba(0, 230, 118, 0.35) 0, transparent 55%);
+      z-index: 0;
+    }
+
+    .branding,
+    .turma-tag {
+      position: relative;
+      z-index: 1;
+    }
+
+    .branding {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .branding .escola {
+      color: var(--amarelo-escuro);
+      font-weight: bold;
+      letter-spacing: 1px;
+      font-size: 16px;
+      text-transform: uppercase;
+      text-shadow: 0 0 6px #000;
+    }
+
+    .branding .evento {
+      color: var(--verde);
+      font-size: 13px;
+      text-shadow: 0 0 6px #000;
+    }
+
+    .turma-tag {
+      background: rgba(0, 0, 0, 0.7);
+      border: 1px solid var(--verde);
+      border-radius: 999px;
+      padding: 4px 14px;
+      font-size: 11px;
+      color: #e0e0e0;
+      white-space: nowrap;
+      text-shadow: 0 0 4px #000;
+    }
+
+    .turma-tag span {
+      color: var(--amarelo);
+      font-weight: bold;
+    }
+
+    /* MENU */
+    nav {
+      background: #050505;
+      border-bottom: 1px solid #333;
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      padding: 8px 12px;
+      flex-wrap: wrap;
+    }
+
+    nav button {
+      text-decoration: none;
+      color: #f5f5f5;
+      font-size: 13px;
+      padding: 6px 12px;
+      border-radius: 999px;
+      border: 1px solid #333;
+      background: #111;
+      transition: 0.2s;
+      cursor: pointer;
+    }
+
+    nav button:hover {
+      background: var(--amarelo);
+      color: #000;
+      border-color: var(--amarelo-escuro);
+    }
+
+    nav button.ativo {
+      background: var(--amarelo);
+      color: #000;
+      border-color: var(--amarelo-escuro);
+      font-weight: bold;
+    }
+
+    main {
+      max-width: 1100px;
+      margin: 20px auto 40px;
+      padding: 0 16px;
+    }
+
+    .secao-titulo {
+      text-align: center;
+      margin-bottom: 16px;
+    }
+
+    .secao-titulo h2 {
+      font-size: 22px;
+      color: var(--verde);
+      margin-bottom: 4px;
+    }
+
+    .secao-titulo p {
+      font-size: 13px;
+      color: #bdbdbd;
+    }
+
+    .card {
+      background: var(--cinza-card);
+      border-radius: 16px;
+      border: 1px solid #333;
+      box-shadow: 0 0 18px rgba(0, 0, 0, 0.7);
+      padding: 16px;
+      position: relative;
+      overflow: hidden;
+      margin-bottom: 24px;
+    }
+
+    .card h3 {
+      font-size: 18px;
+      color: var(--amarelo);
+      margin-bottom: 6px;
+    }
+
+    .card p {
+      font-size: 13px;
+      color: #d0d0d0;
+      margin-bottom: 8px;
+    }
+
+    .layout-jogo {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 16px;
+    }
+
+    @media (max-width: 900px) {
+      .layout-jogo {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .regras-lista {
+      list-style: none;
+      margin-top: 6px;
+      font-size: 13px;
+    }
+
+    .regras-lista li {
+      margin-bottom: 6px;
+      display: flex;
+      align-items: flex-start;
+      gap: 6px;
+    }
+
+    .regras-lista li::before {
+      content: "•";
+      color: var(--verde);
+      margin-top: 2px;
+    }
+
+    .dica {
+      margin-top: 8px;
+      font-size: 12px;
+      color: #bdbdbd;
+      border-top: 1px dashed #444;
+      padding-top: 6px;
+    }
+
+    .footer-creditos {
+      text-align: center;
+      margin-top: 18px;
+      font-size: 11px;
+      color: #9e9e9e;
+    }
+
+    button {
+      margin-top: 8px;
+      padding: 8px 16px;
+      border-radius: 20px;
+      background: var(--verde-escuro);
+      color: #fff;
+      border: 1px solid var(--amarelo-escuro);
+      cursor: pointer;
+      font-size: 13px;
+      transition: 0.2s;
+    }
+
+    button:hover {
+      background: var(--amarelo);
+      color: #000;
+    }
+
+    /* ===== MASTERMIND DE CORES ===== */
+
+    #secao-mastermind {
+      display: block;
+    }
+
+    #secao-hanoi {
+      display: none;
+    }
+
+    #mm-cores-container {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .cores-opcoes {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 4px;
+    }
+
+    .cor-botao {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      border: 2px solid #333;
+      cursor: pointer;
+      box-shadow: 0 0 6px rgba(0,0,0,0.8);
+      outline: none;
+    }
+
+    .cor-botao.selecionada {
+      border-color: var(--amarelo);
+      box-shadow: 0 0 10px var(--amarelo);
+    }
+
+    .slot-sequencia {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      border: 2px dashed #555;
+      cursor: pointer;
+      margin-right: 6px;
+    }
+
+    .linha-tentativa {
+      display: flex;
+      align-items: center;
+      margin-bottom: 4px;
+      font-size: 12px;
+      font-family: "Consolas", monospace;
+    }
+
+    .mm-cores-historico {
+      max-height: 240px;
+      overflow-y: auto;
+      background: #000;
+      border-radius: 10px;
+      border: 1px solid #333;
+      padding: 6px;
+    }
+
+    #mm-cores-status {
+      font-size: 13px;
+      min-height: 18px;
+      color: #e0e0e0;
+    }
+
+    /* ===== TORRE DE HANÓI ===== */
+
+    #hanoi-card {
+      position: relative;
+    }
+
+    #game-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+    }
+
+    #game {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin-top: 10px;
+      padding: 10px;
+      background: #000;
+      border-radius: 16px;
+      border: 1px solid #333;
+      box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.8);
+    }
+
+    .torre {
+      width: 170px;
+      height: 250px;
+      display: flex;
+      flex-direction: column-reverse;
+      align-items: center;
+      position: relative;
+      cursor: pointer;
+    }
+
+    .torre-fundo,
+    .poste,
+    .base {
+      position: absolute;
+      z-index: 0;
+    }
+
+    .torre-fundo {
+      inset: 0;
+      background: radial-gradient(circle at top, #1b1b1b 0, #050505 60%);
+      border-radius: 12px;
+      border: 1px solid #333;
+      opacity: 0.9;
+    }
+
+    .poste {
+      bottom: 24px;
+      width: 10px;
+      height: 170px;
+      background: linear-gradient(180deg, #bbb, #555);
+      left: 50%;
+      transform: translateX(-50%);
+      border-radius: 4px;
+    }
+
+    .base {
+      bottom: 0;
+      height: 18px;
+      width: 100%;
+      background: linear-gradient(180deg, #666, #222);
+      border-radius: 0 0 12px 12px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.7);
+    }
+
+    .disco {
+      position: relative;
+      z-index: 1;
+      height: 22px;
+      border-radius: 999px;
+      margin-bottom: 5px;
+      text-align: center;
+      font-size: 12px;
+      line-height: 22px;
+      color: #000;
+      font-weight: bold;
+      border: 2px solid rgba(0,0,0,0.6);
+      box-shadow: 0 3px 10px rgba(0,0,0,0.9);
+    }
+
+    .size-1 { width: 80px;  background: #ff1744; }
+    .size-2 { width: 100px; background: #ff9100; }
+    .size-3 { width: 120px; background: #ffea00; }
+    .size-4 { width: 140px; background: #00e676; }
+    .size-5 { width: 160px; background: #2979ff; }
+    .size-6 { width: 180px; background: #e040fb; }
+
+    #info-hanoi {
+      font-size: 13px;
+      color: #e0e0e0;
+    }
+
+    #info-hanoi span {
+      color: var(--amarelo);
+      font-weight: bold;
+    }
+
+    #status-hanoi {
+      font-size: 13px;
+      min-height: 18px;
+      margin-top: 4px;
+      color: #bdbdbd;
+      text-align: center;
+    }
+
+    .selecionada {
+      box-shadow: 0 0 18px var(--amarelo);
+      outline: 2px solid var(--amarelo);
+    }
+
+    /* OVERLAY DE PARABÉNS – HANÓI */
+    .celebracao-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.85);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 10;
+      flex-direction: column;
+      text-align: center;
+    }
+
+    .celebracao-overlay.mostrar {
+      display: flex;
+      animation: fadeIn 0.4s ease-out;
+    }
+
+    .celebracao-conteudo h2 {
+      font-size: 26px;
+      color: var(--amarelo);
+      margin-bottom: 8px;
+    }
+
+    .celebracao-conteudo p {
+      font-size: 14px;
+      color: #f5f5f5;
+      margin-bottom: 12px;
+    }
+
+    .celebracao-conteudo button {
+      margin-top: 10px;
+    }
+
+    .balao {
+      position: absolute;
+      bottom: -60px;
+      width: 30px;
+      height: 40px;
+      border-radius: 50% 50% 45% 45%;
+      animation: subirBalao 5s linear infinite;
+      opacity: 0.9;
+    }
+
+    .balao::after {
+      content: "";
+      position: absolute;
+      width: 2px;
+      height: 20px;
+      background: #ffffff;
+      left: 50%;
+      transform: translateX(-50%);
+      bottom: -20px;
+    }
+
+    .confete {
+      position: absolute;
+      width: 6px;
+      height: 10px;
+      border-radius: 2px;
+      animation: cairConfete 3s linear infinite;
+      opacity: 0.9;
+    }
+
+    @keyframes subirBalao {
+      0% { transform: translateY(0); opacity: 0; }
+      10% { opacity: 1; }
+      100% { transform: translateY(-420px); opacity: 0; }
+    }
+
+    @keyframes cairConfete {
+      0% { transform: translateY(-50px) rotate(0deg); opacity: 0; }
+      10% { opacity: 1; }
+      100% { transform: translateY(350px) rotate(360deg); opacity: 0; }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+  </style>
 </head>
 <body>
-<div class="page">
-
-  <!-- CABEÇALHO -->
   <header>
-    <div class="header-content">
-      <h1>CETI - PROFESSORA MARIA DE CASTRO RIBEIRO</h1>
-      <h2>Turma B – Curso de Desenvolvimento de Sistemas</h2>
-      <h3>Dia “D” da Educação Profissional e Tecnológica</h3>
-      <p>Os bastidores da turma que colocou a lógica de programação em prática.</p>
+    <div class="branding">
+      <div class="escola">CETI - PROFESSORA MARIA DE CASTRO RIBEIRO</div>
+      <div class="evento">Dia “D” da Educação Profissional e Tecnológica</div>
+    </div>
+    <div class="turma-tag">
+      Projeto desenvolvido pelos alunos de Desenvolvimento de Sistemas – <span>Turma B</span>
     </div>
   </header>
 
-  <!-- BLOCO PRINCIPAL: SOBRE + FOTO DA TURMA -->
-  <div class="section">
-    <div class="grid-main">
-      <div>
-        <div class="pill"><span class="dot"></span> Sobre a Turma B</div>
-        <h2>Quem somos nós?</h2>
-        <p>
-          A Turma B do curso de Desenvolvimento de Sistemas é formada por estudantes que decidiram
-          ir além do uso da tecnologia: aqui, nós aprendemos a <strong>criar</strong> tecnologia.
-        </p>
-        <p>
-          Durante o ano, estudamos lógica de programação, desenvolvimento de interfaces, organização
-          de dados e o início da programação em Python, HTML, CSS e JavaScript.
-        </p>
-        <p class="tagline">
-          Nosso lema: <strong>“Errar rápido, aprender rápido e melhorar sempre.”</strong>
-        </p>
+  <nav>
+    <button id="btn-mastermind" class="ativo">Mastermind de Cores</button>
+    <button id="btn-hanoi">Torre de Hanói</button>
+  </nav>
+
+  <main>
+    <!-- ================== SEÇÃO MASTERMIND ================== -->
+    <section id="secao-mastermind">
+      <div class="secao-titulo">
+        <h2>Mastermind de Cores</h2>
+        <p>Tente descobrir a sequência secreta de 4 cores usando as dicas de cada tentativa.</p>
       </div>
 
-      <div class="photo-box">
-        <!-- Substituindo placeholder pela imagem da turma -->
-        <img src="https://raw.githubusercontent.com/RicardoRibeiro-Prof/jogo/refs/heads/main/photo01.jpg" alt="Foto da Turma B">
-        <p class="tagline">
-          Foto da Turma B durante os projetos de programação.
-        </p>
-      </div>
-    </div>
-  </div>
+      <div class="card">
+        <div class="layout-jogo">
+          <div>
+            <h3>Jogo Interativo</h3>
+            <p>Selecione uma cor e clique nos círculos vazios para montar sua tentativa.</p>
 
-  <!-- PROJETOS EM DESTAQUE -->
-  <div class="section">
-    <div class="pill"><span class="dot"></span> Projetos em Destaque</div>
-    <h2>O que a Turma B construiu para o Dia “D”</h2>
-    <p>
-      Para o Dia “D” da Educação Profissional e Tecnológica, a Turma B preparou atividades práticas
-      para mostrar que programação não é um bicho de sete cabeças — e pode, sim, ser divertida.
-    </p>
-    <div class="projects-grid">
-      <div class="project-card">
-        <h3>Estande 1 – Programação na Prática</h3>
-        <p>
-          Demonstração de códigos simples em Python, mostrando variáveis, decisões, repetições e exemplos
-          de problemas do dia a dia sendo resolvidos com lógica.
-        </p>
-      </div>
-      <div class="project-card">
-        <h3>Estande 2 – Criação de Sites</h3>
-        <p>
-          Páginas criadas com HTML, CSS e um toque de JavaScript, explicando como layouts, cores e textos
-          se transformam em um site completo.
-        </p>
-      </div>
-      <div class="project-card">
-        <h3>Estande 3 – Jogos de Lógica 1 e 2</h3>
-        <p>
-          Jogos digitais como <strong>Mastermind</strong> e <strong>adivinhação de números</strong>, usados para
-          treinar raciocínio lógico, dedução e pensamento algorítmico.
-        </p>
-      </div>
-      <div class="project-card">
-        <h3>Estande 4 – Pensamento Lógico</h3>
-        <p>
-          Desafios com Sudoku, enigmas e atividades de lógica, mostrando como a mesma forma de pensar é usada
-          tanto em jogos quanto na programação.
-        </p>
-      </div>
-    </div>
-  </div>
+            <div id="mm-cores-container">
+              <div class="cores-opcoes">
+                <button class="cor-botao" data-cor="R" style="background:#f44336"></button>
+                <button class="cor-botao" data-cor="G" style="background:#4caf50"></button>
+                <button class="cor-botao" data-cor="B" style="background:#2196f3"></button>
+                <button class="cor-botao" data-cor="Y" style="background:#ffeb3b"></button>
+                <button class="cor-botao" data-cor="O" style="background:#ff9800"></button>
+                <button class="cor-botao" data-cor="P" style="background:#9c27b0"></button>
+              </div>
 
-  <!-- ESTUDANTES DA TURMA B -->
-  <div class="section">
-    <div class="pill"><span class="dot"></span> Quem faz a Turma B acontecer</div>
-    <h2>Estudantes da Turma B</h2>
-    <p>
-      Estes são os estudantes que contribuíram para os projetos e para a montagem dos estandes
-      do Dia “D” da Educação Profissional e Tecnológica.
-    </p>
-    <div class="students-list">
-      <div class="student-pill">ADRIEL LIMA DE SOUSA</div>
-      <div class="student-pill">ANA BEATRIZ RIBEIRO DE JESUS</div>
-      <div class="student-pill">ANA KARLA DA SILVA</div>
-      <div class="student-pill">ANA KELLY DA COSTA SILVA</div>
-      <div class="student-pill">ANTONIO MANOEL GUERRA MARQUES</div>
-      <div class="student-pill">CARLOS MIGUEL RIBEIRO SILVA</div>
-      <div class="student-pill">DEVID SOUSA SILVA</div>
-      <div class="student-pill">DIOGO PAES LANDIM DOS SANTOS</div>
-      <div class="student-pill">DUAN PHELIPE DE SOUSA NEGREIROS</div>
-      <div class="student-pill">EZEQUIEL MARQUES ARAGAO</div>
-      <div class="student-pill">GUSTAVO DE SOUSA OLIVEIRA</div>
-      <div class="student-pill">IVANIEL ASSIS OLIVEIRA</div>
-      <div class="student-pill">JHENNIFER KAILLA SANTOS BRITO</div>
-      <div class="student-pill">JOAO GUSTAVO DOS SANTOS SILVA MESQUITA</div>
-      <div class="student-pill">JOHNNY DE OLIVEIRA SANTOS</div>
-      <div class="student-pill">KAUANDERSON DA SILVA DUARTE</div>
-      <div class="student-pill">KINBERLLY VITORIA DEUSDARÁ PAES RIBEIRO</div>
-      <div class="student-pill">LOURDES MARIA DA SILVA OLIVEIRA</div>
-      <div class="student-pill">MAILTON GOMES DA COSTA NUNES</div>
-      <div class="student-pill">MARIA CLARA MIRANDA DE OLIVEIRA</div>
-      <div class="student-pill">MARKOS KRYSTIAN MARQUES DE OLIVEIRA</div>
-      <div class="student-pill">MATEUS HENRIQUE ROLDÃO DA SILVA SOUSA</div>
-      <div class="student-pill">PAULO VITOR ALVES SOARES</div>
-      <div class="student-pill">PEDRO DOS SANTOS PEREIRA</div>
-      <div class="student-pill">PEDRO MIGUEL RODRIGUES DA SILVA</div>
-      <div class="student-pill">RAFAEL DA SILVA PAES LANDIM</div>
-      <div class="student-pill">RAYLON MIGUEL NEGREIROS PEREIRA</div>
-      <div class="student-pill">RENAN GABRIEL MACÊDO DE SOUSA</div>
-      <div class="student-pill">ROBSON GOMES DE SOUSA</div>
-      <div class="student-pill">SAMUEL FERREIRA DA COSTA</div>
-      <div class="student-pill">SAMUEL RAMOS DA SILVA LACERDA</div>
-      <div class="student-pill">TIAGO DE JESUS PAES LANDIM</div>
-      <div class="student-pill">VITOR MANOEL SANTOS COSTA</div>
-      <div class="student-pill">YASMIN PAES LANDIM SANTOS</div>
-    </div>
-  </div>
+              <div style="display:flex; gap:6px; align-items:center; margin-top:4px;">
+                <div id="slot1" class="slot-sequencia"></div>
+                <div id="slot2" class="slot-sequencia"></div>
+                <div id="slot3" class="slot-sequencia"></div>
+                <div id="slot4" class="slot-sequencia"></div>
+                <button id="mm-cores-tentar">Tentar</button>
+                <button id="mm-cores-reiniciar">Novo Código</button>
+              </div>
 
-  <footer>
-    <p>
-      <strong>CETI - Professora Maria de Castro Ribeiro</strong> – Curso de Desenvolvimento de Sistemas – Turma B
-    </p>
-  </footer>
-</div>
+              <div id="mm-cores-status"></div>
+              <div class="mm-cores-historico" id="mm-cores-historico"></div>
+            </div>
+          </div>
+
+          <aside>
+            <h3>Como jogar?</h3>
+            <ul class="regras-lista">
+              <li>A máquina escolhe uma sequência secreta de 4 cores (podem repetir).</li>
+              <li>Escolha uma cor, clique nos círculos vazios até completar a tentativa.</li>
+              <li>O histórico mostra cada tentativa com o resultado:
+                <br>- Quantas cores estão na posição certa.<br>
+                - Quantas cores existem, mas em posição errada.
+              </li>
+              <li>Use as dicas para melhorar sua estratégia a cada rodada.</li>
+            </ul>
+            <div class="dica">
+              <strong>Dica:</strong> Nas primeiras jogadas, teste cores diferentes para descobrir quais fazem parte do código.
+            </div>
+          </aside>
+        </div>
+
+        <div class="footer-creditos">
+          “Lógica também é criatividade: experimentar, errar, aprender e tentar de novo.”
+        </div>
+      </div>
+    </section>
+
+    <!-- ================== SEÇÃO TORRE DE HANÓI ================== -->
+    <section id="secao-hanoi">
+      <div class="secao-titulo">
+        <h2>Torre de Hanói</h2>
+        <p>Desafie sua lógica movendo os discos entre as torres, sem colocar um maior sobre um menor.</p>
+      </div>
+
+      <div class="card" id="hanoi-card">
+        <div class="celebracao-overlay" id="celebracao">
+          <div class="celebracao-conteudo">
+            <h2>🎉 Parabéns! 🎉</h2>
+            <p>Você completou a Torre de Hanói com <span id="movimentos-final"></span> movimentos!</p>
+            <p>Isso é raciocínio lógico, paciência e estratégia na prática. 👏</p>
+            <button id="btn-jogar-novamente">Jogar Novamente</button>
+          </div>
+        </div>
+
+        <div class="layout-jogo">
+          <div>
+            <h3>Jogo Interativo</h3>
+            <p>Clique na torre de origem e depois na torre de destino para mover o disco.</p>
+
+            <div id="game-container">
+              <div id="info-hanoi">
+                Movimentos: <span id="movimentos-hanoi">0</span> |
+                Número de discos: <span id="numDiscos">6</span>
+              </div>
+              <div id="status-hanoi">Clique em uma torre com discos para escolher a origem.</div>
+
+              <div id="game">
+                <div class="torre" data-idx="0">
+                  <div class="torre-fundo"></div>
+                  <div class="poste"></div>
+                  <div class="base"></div>
+                </div>
+                <div class="torre" data-idx="1">
+                  <div class="torre-fundo"></div>
+                  <div class="poste"></div>
+                  <div class="base"></div>
+                </div>
+                <div class="torre" data-idx="2">
+                  <div class="torre-fundo"></div>
+                  <div class="poste"></div>
+                  <div class="base"></div>
+                </div>
+              </div>
+
+              <button id="reiniciar-hanoi">Reiniciar</button>
+            </div>
+          </div>
+
+          <aside>
+            <h3>Regras da Torre de Hanói</h3>
+            <ul class="regras-lista">
+              <li>Mova apenas <strong>um disco por vez</strong>.</li>
+              <li>Sempre mova o <strong>disco de cima</strong> de uma torre.</li>
+              <li><strong>Proibido</strong> colocar um disco maior sobre um menor.</li>
+              <li>O desafio termina quando todos os discos estiverem em outra torre, na mesma ordem.</li>
+            </ul>
+            <div class="dica">
+              <strong>Dica:</strong> Para 6 discos, o mínimo de movimentos é <strong>63</strong>.
+              Tente chegar o mais próximo possível!
+            </div>
+          </aside>
+        </div>
+
+        <div class="footer-creditos">
+          “Resolver desafios passo a passo é exatamente o que a programação nos ensina a fazer.”
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    /* ====== TROCA DE SEÇÃO (MENU) ====== */
+    const btnMastermind = document.getElementById("btn-mastermind");
+    const btnHanoi = document.getElementById("btn-hanoi");
+    const secaoMastermind = document.getElementById("secao-mastermind");
+    const secaoHanoi = document.getElementById("secao-hanoi");
+
+    btnMastermind.addEventListener("click", () => {
+      btnMastermind.classList.add("ativo");
+      btnHanoi.classList.remove("ativo");
+      secaoMastermind.style.display = "block";
+      secaoHanoi.style.display = "none";
+    });
+
+    btnHanoi.addEventListener("click", () => {
+      btnHanoi.classList.add("ativo");
+      btnMastermind.classList.remove("ativo");
+      secaoMastermind.style.display = "none";
+      secaoHanoi.style.display = "block";
+    });
+
+    /* ========= MASTERMIND DE CORES ========= */
+
+    const coresPossiveis = ["R","G","B","Y","O","P"];
+    let codigoCores = [];
+    let tentativaCores = ["","","",""];
+    let tentativasCores = 0;
+    let corAtualSelecionada = null;
+
+    function gerarCodigoCores() {
+      codigoCores = [];
+      for (let i = 0; i < 4; i++) {
+        const cor = coresPossiveis[Math.floor(Math.random() * coresPossiveis.length)];
+        codigoCores.push(cor);
+      }
+      tentativaCores = ["","","",""];
+      tentativasCores = 0;
+      const hist = document.getElementById("mm-cores-historico");
+      if (hist) hist.innerHTML = "";
+      const status = document.getElementById("mm-cores-status");
+      if (status) status.textContent =
+        "Novo código de cores gerado. Monte sua primeira tentativa!";
+      limparSlotsCores();
+    }
+
+    function limparSlotsCores() {
+      for (let i = 1; i <= 4; i++) {
+        const s = document.getElementById("slot"+i);
+        if (!s) continue;
+        s.style.background = "transparent";
+        s.style.borderStyle = "dashed";
+        tentativaCores[i-1] = "";
+      }
+    }
+
+    function corParaHex(c) {
+      switch(c){
+        case "R": return "#f44336";
+        case "G": return "#4caf50";
+        case "B": return "#2196f3";
+        case "Y": return "#ffeb3b";
+        case "O": return "#ff9800";
+        case "P": return "#9c27b0";
+        default:  return "#000";
+      }
+    }
+
+    document.querySelectorAll(".cor-botao").forEach(btn=>{
+      btn.addEventListener("click", ()=>{
+        document.querySelectorAll(".cor-botao").forEach(b=>b.classList.remove("selecionada"));
+        btn.classList.add("selecionada");
+        corAtualSelecionada = btn.dataset.cor;
+      });
+    });
+
+    for (let i = 1; i <= 4; i++) {
+      const slot = document.getElementById("slot"+i);
+      if (!slot) continue;
+      slot.addEventListener("click", ()=>{
+        if(!corAtualSelecionada) {
+          const st = document.getElementById("mm-cores-status");
+          if (st) st.textContent =
+            "Escolha uma cor antes de clicar no círculo.";
+          return;
+        }
+        slot.style.background = corParaHex(corAtualSelecionada);
+        slot.style.borderStyle = "solid";
+        tentativaCores[i-1] = corAtualSelecionada;
+      });
+    }
+
+    function tentarCores() {
+      const status = document.getElementById("mm-cores-status");
+      const historico = document.getElementById("mm-cores-historico");
+      if (!status || !historico) return;
+
+      if (tentativaCores.some(c => c === "")) {
+        status.textContent =
+          "Preencha os 4 círculos com cores antes de tentar.";
+        return;
+      }
+
+      tentativasCores++;
+
+      let certoPos = 0;
+      let certoCor = 0;
+
+      const codTemp = [...codigoCores];
+      const tentTemp = [...tentativaCores];
+
+      for (let i=0;i<4;i++) {
+        if (tentTemp[i] === codTemp[i]) {
+          certoPos++;
+          codTemp[i] = null;
+          tentTemp[i] = null;
+        }
+      }
+
+      for (let i=0;i<4;i++) {
+        if (tentTemp[i] !== null) {
+          const idx = codTemp.indexOf(tentTemp[i]);
+          if (idx !== -1) {
+            certoCor++;
+            codTemp[idx] = null;
+          }
+        }
+      }
+
+      const linha = document.createElement("div");
+      linha.classList.add("linha-tentativa");
+
+      let bolinhas = "";
+      tentativaCores.forEach(c=>{
+        bolinhas += `<span style="display:inline-block;width:14px;height:14px;border-radius:50%;margin-right:3px;background:${corParaHex(c)}"></span>`;
+      });
+
+      if (certoPos === 4) {
+        linha.innerHTML = `${bolinhas} → ✅ 4 na posição certa!`;
+        historico.prepend(linha);
+        status.textContent =
+          "Parabéns! Você acertou a sequência de cores!";
+      } else {
+        linha.innerHTML =
+          `${bolinhas} → ${certoPos} na posição certa, ${certoCor} com cor certa em posição errada.`;
+        historico.prepend(linha);
+        status.textContent =
+          "Use as dicas da linha mais recente para ajustar sua próxima tentativa.";
+      }
+    }
+
+    const btnTentar = document.getElementById("mm-cores-tentar");
+    if (btnTentar) btnTentar.addEventListener("click", tentarCores);
+    const btnReiniciarMM = document.getElementById("mm-cores-reiniciar");
+    if (btnReiniciarMM) btnReiniciarMM.addEventListener("click", gerarCodigoCores);
+
+    gerarCodigoCores();
+
+    /* ========= TORRE DE HANÓI ========= */
+
+    const NUM_DISCOS = 6;
+    let torres = [[],[],[]];
+    let origemSelecionada = null;
+    let movimentosHanoi = 0;
+
+    const torresElem = document.querySelectorAll(".torre");
+    const movimentosSpanHanoi = document.getElementById("movimentos-hanoi");
+    const statusHanoi = document.getElementById("status-hanoi");
+    const numDiscosSpan = document.getElementById("numDiscos");
+    const btnReiniciarHanoi = document.getElementById("reiniciar-hanoi");
+
+    const celebracao = document.getElementById("celebracao");
+    const movimentosFinalSpan = document.getElementById("movimentos-final");
+    const btnJogarNovamente = document.getElementById("btn-jogar-novamente");
+    const cardHanoi = document.getElementById("hanoi-card");
+
+    function iniciarHanoi() {
+      torres = [[],[],[]];
+      for (let t = NUM_DISCOS; t >= 1; t--) {
+        torres[0].push(t);
+      }
+      movimentosHanoi = 0;
+      if (movimentosSpanHanoi) movimentosSpanHanoi.textContent = movimentosHanoi;
+      if (numDiscosSpan) numDiscosSpan.textContent = NUM_DISCOS;
+      origemSelecionada = null;
+      limparSelecaoTorres();
+      if (statusHanoi) statusHanoi.textContent =
+        "Clique em uma torre com discos para escolher a origem.";
+      esconderCelebracao();
+      desenharHanoi();
+    }
+
+    function desenharHanoi() {
+      torresElem.forEach((torreElem, idx)=>{
+        torreElem.querySelectorAll(".disco").forEach(d=>d.remove());
+        const torre = torres[idx];
+        torre.forEach((tamanho)=>{
+          const disco = document.createElement("div");
+          disco.classList.add("disco","size-"+tamanho);
+          disco.textContent = tamanho;
+          torreElem.appendChild(disco);
+        });
+      });
+    }
+
+    function limparSelecaoTorres() {
+      torresElem.forEach(t=>t.classList.remove("selecionada"));
+    }
+
+    function cliqueTorre(idx) {
+      if (celebracao && celebracao.classList.contains("mostrar")) return;
+
+      if (origemSelecionada === null) {
+        if (torres[idx].length === 0) {
+          if (statusHanoi) statusHanoi.textContent =
+            "Essa torre está vazia. Escolha uma torre com discos.";
+          return;
+        }
+        origemSelecionada = idx;
+        limparSelecaoTorres();
+        torresElem[idx].classList.add("selecionada");
+        if (statusHanoi) statusHanoi.textContent =
+          `Origem selecionada: Torre ${idx+1}. Agora clique na torre de destino.`;
+      } else {
+        const origem = origemSelecionada;
+        const destino = idx;
+
+        if (origem === destino) {
+          if (statusHanoi) statusHanoi.textContent =
+            "Origem e destino são a mesma torre. Escolha uma torre diferente.";
+          origemSelecionada = null;
+          limparSelecaoTorres();
+          return;
+        }
+
+        if (movimentoValido(origem, destino)) {
+          const disco = torres[origem].pop();
+          torres[destino].push(disco);
+          movimentosHanoi++;
+          if (movimentosSpanHanoi) movimentosSpanHanoi.textContent = movimentosHanoi;
+          desenharHanoi();
+          if (statusHanoi) statusHanoi.textContent =
+            `Movido da Torre ${origem+1} para a Torre ${destino+1}.`;
+
+          if (jogoConcluido()) {
+            mostrarCelebracao();
+          }
+        } else {
+          if (statusHanoi) statusHanoi.textContent =
+            "Movimento inválido! Não coloque disco maior sobre disco menor.";
+        }
+
+        origemSelecionada = null;
+        limparSelecaoTorres();
+      }
+    }
+
+    function movimentoValido(origem, destino) {
+      if (torres[origem].length === 0) return false;
+      const discoOrigem = torres[origem][torres[origem].length-1];
+      if (torres[destino].length === 0) return true;
+      const discoDestino = torres[destino][torres[destino].length-1];
+      return discoOrigem < discoDestino;
+    }
+
+    function jogoConcluido() {
+      return torres[1].length === NUM_DISCOS || torres[2].length === NUM_DISCOS;
+    }
+
+    function mostrarCelebracao() {
+      if (movimentosFinalSpan) movimentosFinalSpan.textContent = movimentosHanoi;
+      if (celebracao) celebracao.classList.add("mostrar");
+      criarBaloesEConfetes();
+      if (statusHanoi) statusHanoi.textContent =
+        `Parabéns! Você completou o desafio em ${movimentosHanoi} movimentos.`;
+    }
+
+    function esconderCelebracao() {
+      if (!celebracao || !cardHanoi) return;
+      celebracao.classList.remove("mostrar");
+      cardHanoi.querySelectorAll(".balao, .confete").forEach(el=>el.remove());
+    }
+
+    function criarBaloesEConfetes() {
+      if (!cardHanoi) return;
+      const coresBaloes = ["#ff1744", "#ff9100", "#ffea00", "#00e676", "#2979ff", "#e040fb"];
+      const coresConfete = [
+        "#ff1744", "#ff9100", "#ffea00", "#00e676", "#2979ff", "#e040fb", "#ffffff"
+      ];
+
+      for (let i=0;i<12;i++){
+        const balao = document.createElement("div");
+        balao.classList.add("balao");
+        balao.style.left = Math.random()*100 + "%";
+        balao.style.background = coresBaloes[Math.floor(Math.random()*coresBaloes.length)];
+        balao.style.animationDuration = (4+Math.random()*3)+"s";
+        cardHanoi.appendChild(balao);
+      }
+
+      for (let i=0;i<80;i++){
+        const confete = document.createElement("div");
+        confete.classList.add("confete");
+        confete.style.left = Math.random()*100 + "%";
+        confete.style.top = (Math.random()*40-40)+"px";
+        confete.style.background = coresConfete[Math.floor(Math.random()*coresConfete.length)];
+        confete.style.animationDuration = (2+Math.random()*2)+"s";
+        cardHanoi.appendChild(confete);
+      }
+    }
+
+    torresElem.forEach((elem,idx)=>{
+      elem.addEventListener("click", ()=>cliqueTorre(idx));
+    });
+    if (btnReiniciarHanoi) btnReiniciarHanoi.addEventListener("click", iniciarHanoi);
+    if (btnJogarNovamente) btnJogarNovamente.addEventListener("click", iniciarHanoi);
+
+    iniciarHanoi();
+  </script>
 </body>
 </html>
